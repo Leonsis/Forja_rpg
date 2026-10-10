@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forja de RPG — Heróis, Mestre e Monstros</title>
+  <meta name="description" content="Plataforma completa de RPG: D&D 5e, Tormenta 20, Ordem Paranormal, ferramentas do mestre e bestiário.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  :root {
+    --pergaminho: #f5ecd7; --pergaminho-2: #ede0c4; --pergaminho-3: #e3d2ac;
+    --marrom-escuro: #3d2415; --marrom: #5c3a1e;
+    --vermelho: #8b1e1e; --vermelho-2: #a83328;
+    --dourado: #b8892b; --dourado-2: #d4a444;
+    --texto: #3a2414; --texto-suave: #6b5340; --preto: #0f0a06;
+    --shadow: 0 15px 40px -15px rgba(26, 15, 8, 0.4);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  *, *::before, *::after { box-sizing: border-box; min-width: 0; max-width: 100%; }
+  html { scroll-behavior: smooth; scroll-padding-top: 140px; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'EB Garamond', Georgia, serif; color: var(--texto);
+    background-color: var(--pergaminho);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(184,137,43,0.08), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(139,30,30,0.06), transparent 45%);
+    line-height: 1.6; overflow-x: hidden; margin: 0; padding: 0;
+  }
+  input, textarea, select { font-family: inherit; font-size: 1rem; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  h1, h2, h3, h4, h5 {
+    font-family: 'Cinzel', serif; color: var(--marrom-escuro); font-weight: 700;
+    word-wrap: break-word; overflow-wrap: anywhere; margin: 0 0 0.5rem;
+  }
+  h1 { font-size: clamp(1.4rem, 4.5vw, 2.8rem); line-height: 1.2; }
+  a { text-decoration: none; transition: var(--transition); }
+
+  .navbar {
+    background: rgba(245,236,215,0.97) !important;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--marrom); padding: 0.6rem 0; transition: var(--transition);
+  }
+  .navbar.scrolled { padding: 0.45rem 0; box-shadow: 0 6px 24px rgba(61,36,21,0.15); }
+  .navbar-brand {
+    font-family: 'Cinzel', serif; font-weight: 800; font-size: 0.95rem;
+    color: var(--marrom-escuro) !important; display: flex; align-items: center;
+    gap: 0.5rem; padding: 0; max-width: 100%;
+  }
+  .navbar-brand .brand-icon {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--vermelho-2), var(--vermelho));
+    border: 2px solid var(--dourado);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--dourado-2); font-size: 0.9rem; flex-shrink: 0;
+  }
+  .navbar-nav .nav-link {
+    color: var(--marrom) !important; font-family: 'Cinzel', serif;
+    font-weight: 600; font-size: 0.75rem; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 0.5rem 0.85rem !important;
+    border-radius: 6px; cursor: pointer;
+  }
+  .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+    color: var(--pergaminho) !important;
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+  }
+  .navbar-toggler { border: 1.5px solid var(--marrom); padding: 0.3rem 0.5rem; }
+  .navbar-toggler:focus { box-shadow: none; }
+
+  .btn {
+    border-radius: 4px; font-family: 'Cinzel', serif; font-weight: 700;
+    padding: 0.65rem 1.2rem; font-size: 0.72rem; letter-spacing: 0.06em;
+    text-transform: uppercase; border: none; transition: var(--transition);
+    white-space: normal; line-height: 1.2; max-width: 100%; word-wrap: break-word;
+  }
+  .btn-vermelho {
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+    color: var(--pergaminho); border: 1.5px solid var(--dourado);
+    box-shadow: 0 6px 18px -8px rgba(139,30,30,0.7);
+  }
+  .btn-vermelho:hover { transform: translateY(-2px); color: var(--dourado-2); }
+  .btn-outline-marrom { background: transparent; color: var(--marrom); border: 1.5px solid var(--marrom); }
+  .btn-outline-marrom:hover { background: var(--marrom); color: var(--pergaminho); }
+  .btn-dourado {
+    background: linear-gradient(135deg, var(--dourado), var(--dourado-2));
+    color: var(--marrom-escuro); border: 1.5px solid var(--marrom);
+  }
+  .btn-dourado:hover { transform: translateY(-2px); }
+  .btn-preto {
+    background: linear-gradient(135deg, var(--preto), #241513);
+    color: var(--dourado-2); border: 1.5px solid var(--dourado);
+    box-shadow: 0 6px 18px -8px rgba(0,0,0,0.8);
+  }
+  .btn-preto:hover { transform: translateY(-2px); color: var(--pergaminho); }
+
+  section { padding: 1.5rem 0; }
+  .container { width: 100%; padding-left: 0.75rem; padding-right: 0.75rem; margin: 0 auto; }
+
+  .page-header { text-align: center; padding: 7.5rem 0.75rem 1rem; }
+  .page-header .section-label {
+    display: inline-block; font-family: 'Cinzel', serif; font-size: 0.6rem;
+    font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--vermelho); margin-bottom: 0.5rem; padding: 0 1rem; position: relative;
+  }
+  .page-header .section-label::before, .page-header .section-label::after {
+    content: ''; position: absolute; top: 50%; width: 0.85rem; height: 1px;
+    background: var(--dourado);
+  }
+  .page-header .section-label::before { left: 0; }
+  .page-header .section-label::after { right: 0; }
+  .page-header .d-flex { display: flex !important; flex-direction: column; width: 100%; gap: 0.5rem !important; }
+  .page-header .btn { width: 100%; }
+
+  .save-indicator {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-suave);
+    transition: color 0.3s ease; text-align: center; opacity: 0.85; margin: 0.75rem 0 0;
+  }
+  .save-indicator::before {
+    content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+    margin-right: 0.4rem; color: var(--dourado);
+  }
+  .save-indicator.dirty { color: var(--vermelho); }
+  .save-indicator.dirty::before {
+    content: '\f021'; color: var(--vermelho);
+    animation: spin 1.2s linear infinite; display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .system-selector {
+    position: fixed; top: 68px; left: 50%; transform: translateX(-50%);
+    z-index: 9500; display: flex; gap: 0.3rem; padding: 0.35rem;
+    background: rgba(245,236,215,0.98); border: 2px solid var(--marrom);
+    border-radius: 50px; box-shadow: 0 10px 30px -10px rgba(61,36,21,0.4);
+    backdrop-filter: blur(10px); max-width: calc(100% - 1rem);
+    flex-wrap: wrap; justify-content: center;
+  }
+  .system-selector button {
+    border: none; background: transparent; color: var(--marrom);
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.68rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.4rem 0.85rem; border-radius: 50px; cursor: pointer;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .system-selector button:hover { background: rgba(139,30,30,0.08); color: var(--vermelho); }
+  .system-selector button.active {
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+    color: var(--pergaminho); box-shadow: 0 4px 12px -4px rgba(139,30,30,0.6);
+  }
+  @media (max-width: 576px) {
+    .system-selector { top: 58px; z-index: 1020; padding: 0.25rem; gap: 0.15rem; }
+    .system-selector button { font-size: 0.55rem; padding: 0.35rem 0.55rem; letter-spacing: 0.02em; }
+  }
+
+  /* FICHAS D&D/T20 */
+  .sheet-wrap {
+    background: #fffaeb; border: 2px double var(--marrom);
+    border-radius: 6px; padding: 0.75rem; box-shadow: var(--shadow);
+    margin-bottom: 1rem; position: relative; width: 100%; max-width: 100%; overflow: hidden;
+  }
+  .sheet-wrap::before {
+    content: ''; position: absolute; inset: 4px;
+    border: 1px solid rgba(184,137,43,0.35); border-radius: 3px; pointer-events: none;
+  }
+  .sheet-header, .sheet-header.secondary, .page2-header {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.4rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--marrom);
+    margin-bottom: 0.75rem; position: relative; z-index: 2; width: 100%;
+  }
+  .sheet-header.secondary { border-bottom: none; padding-bottom: 0; margin-bottom: 0.75rem; }
+  .field {
+    border: 1px solid var(--marrom); background: #fffdf5;
+    padding: 0.35rem 0.5rem; border-radius: 3px;
+    width: 100%; display: flex; flex-direction: column;
+  }
+  .field-label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.52rem;
+    font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.15rem; line-height: 1.15;
+  }
+  .field-input {
+    border: none; background: transparent; font-family: 'EB Garamond', serif;
+    font-size: 0.95rem; color: var(--marrom-escuro); font-weight: 600;
+    padding: 0.05rem 0; outline: none; width: 100%;
+  }
+  .sheet-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem; position: relative; z-index: 2; align-items: start; width: 100%;
+  }
+  .block, .big-block, .trait-block, .hp-block {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.75rem 0.5rem 0.5rem;
+    margin-bottom: 0.5rem; width: 100%; position: relative; overflow: hidden;
+  }
+  .block-title {
+    font-family: 'Cinzel', serif; font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--marrom);
+    text-align: center;
+    background: linear-gradient(180deg, var(--pergaminho-2), var(--pergaminho-3));
+    border: 1px solid var(--marrom); border-radius: 2px;
+    padding: 0.2rem 0.35rem; margin: -0.75rem -0.5rem 0.5rem; line-height: 1.15;
+  }
+  .attr-block {
+    display: flex; flex-direction: column; gap: 0.3rem;
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.4rem 0.5rem;
+    margin-bottom: 0.35rem; width: 100%;
+  }
+  .attr-name {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--marrom);
+    text-align: center; line-height: 1.15;
+  }
+  .attr-values {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.35rem; width: 100%;
+  }
+  .attr-value-input, .attr-mod-input {
+    border: 1px solid var(--marrom); font-family: 'Cinzel', serif;
+    font-weight: 700; text-align: center; border-radius: 2px;
+    outline: none; padding: 0.2rem; width: 100%; min-width: 0;
+  }
+  .attr-value-input { background: #fff; font-size: 1.1rem; color: var(--vermelho); }
+  .attr-mod-input { background: var(--pergaminho-2); font-size: 0.85rem; color: var(--marrom-escuro); }
+  .check-list { list-style: none; padding: 0; margin: 0; width: 100%; }
+  .check-item {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.25rem 0; font-size: 0.82rem; color: var(--texto);
+    border-bottom: 1px dotted rgba(92,58,30,0.2);
+    width: 100%; flex-wrap: nowrap;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] {
+    accent-color: var(--vermelho); width: 16px; height: 16px;
+    flex: 0 0 16px; margin: 0; padding: 0;
+  }
+  .check-item .mod {
+    width: 38px; flex: 0 0 38px; border: 1px solid var(--marrom);
+    background: #fff; font-family: 'Cinzel', serif; font-size: 0.72rem;
+    font-weight: 700; text-align: center; color: var(--marrom-escuro);
+    padding: 0.15rem 0; border-radius: 2px; outline: none;
+  }
+  .check-item .name {
+    flex: 1 1 auto; font-size: 0.85rem; line-height: 1.2;
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .check-item .attr-ref {
+    font-size: 0.68rem; color: var(--texto-suave);
+    font-style: italic; flex: 0 0 auto; white-space: nowrap;
+  }
+  .combat-row {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem; margin-bottom: 0.5rem; width: 100%;
+  }
+  .combat-cell {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.4rem 0.5rem; text-align: center;
+    width: 100%; display: flex; flex-direction: column; justify-content: center;
+  }
+  .combat-cell label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.52rem;
+    font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.2rem; line-height: 1.15;
+  }
+  .combat-cell input {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; padding: 0.2rem;
+    border-radius: 2px; outline: none; width: 100%;
+  }
+  .hp-row {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem; margin-top: 0.35rem;
+  }
+  .hp-cell {
+    border: 1px solid var(--marrom); background: #fff;
+    padding: 0.35rem 0.5rem; border-radius: 2px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 0.4rem; width: 100%;
+  }
+  .hp-cell span {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--marrom);
+    line-height: 1.15; flex: 1 1 auto; overflow-wrap: anywhere;
+  }
+  .hp-cell input {
+    width: 60px; flex: 0 0 60px; border: none;
+    border-bottom: 1px solid var(--marrom); background: transparent;
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; outline: none; padding: 0;
+  }
+  .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0; padding: 0; }
+  .attack-table, .spell-table {
+    width: 100%; min-width: 320px; border-collapse: collapse;
+    font-size: 0.78rem; table-layout: fixed;
+  }
+  .attack-table th, .spell-table th {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--marrom);
+    text-align: left; padding: 0.25rem 0.3rem;
+    border-bottom: 1px solid var(--marrom); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .attack-table td, .spell-table td { padding: 0; border-bottom: 1px dotted rgba(92,58,30,0.25); overflow: hidden; }
+  .attack-table input, .spell-table input {
+    width: 100%; border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.82rem;
+    padding: 0.3rem; outline: none; color: var(--marrom-escuro);
+  }
+  .trait-block label, .big-block label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.55rem;
+    font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.3rem; line-height: 1.15;
+  }
+  .big-block label { text-align: center; padding-bottom: 0.2rem; border-bottom: 1px solid var(--marrom); }
+  .trait-block textarea, .big-block textarea {
+    border: none; background: transparent; font-family: 'EB Garamond', serif;
+    font-size: 0.9rem; color: var(--marrom-escuro); resize: vertical;
+    outline: none; padding: 0; width: 100%; min-height: 65px;
+  }
+  .big-block textarea { min-height: 90px; }
+  .page2-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; position: relative; z-index: 2; width: 100%; }
+  .spell-slots {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem; margin-bottom: 0.75rem; position: relative; z-index: 2; width: 100%;
+  }
+  .slot-box {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.35rem 0.3rem; text-align: center; width: 100%;
+  }
+  .slot-box label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.52rem;
+    font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.15rem; line-height: 1.1;
+  }
+  .slot-box input {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; padding: 0.15rem;
+    border-radius: 2px; outline: none; width: 100%;
+  }
+  .spell-level-header {
+    background: linear-gradient(90deg, var(--marrom), var(--marrom-escuro));
+    color: var(--pergaminho); font-family: 'Cinzel', serif;
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.35rem 0.5rem;
+    border-radius: 2px; margin: 0.75rem 0 0.4rem;
+    position: relative; z-index: 2; width: 100%;
+  }
+
+  /* T20 */
+  .t20-sheet {
+    background: #fffaeb; border: 3px double var(--marrom);
+    border-radius: 6px; padding: 0.85rem; box-shadow: var(--shadow);
+    position: relative; overflow: hidden; margin-bottom: 1.25rem;
+  }
+  .t20-header {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem; padding-bottom: 0.75rem;
+    border-bottom: 3px solid var(--vermelho); margin-bottom: 0.9rem; position: relative;
+  }
+  .t20-title {
+    display: block; width: 100%; text-align: center;
+    font-family: 'Cinzel', serif; font-weight: 800;
+    font-size: clamp(1.1rem, 5vw, 1.6rem); letter-spacing: 0.06em;
+    color: var(--pergaminho); text-shadow: 1px 1px 0 var(--dourado);
+    padding: 0.35rem 1rem;
+    background: linear-gradient(90deg, var(--vermelho), var(--vermelho-2));
+    border: 2px solid var(--dourado); border-radius: 4px;
+    margin-bottom: 0.5rem; line-height: 1.15;
+  }
+  .t20-field {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    padding: 0.35rem 0.5rem; border-radius: 3px;
+    display: flex; flex-direction: column; min-width: 0; width: 100%;
+  }
+  .t20-field.full { grid-column: 1 / -1; }
+  .t20-field-label {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.15rem;
+  }
+  .t20-field-input {
+    border: none; background: transparent; font-family: 'EB Garamond', serif;
+    font-size: 0.95rem; color: var(--marrom-escuro); font-weight: 600;
+    outline: none; width: 100%;
+  }
+  .t20-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; }
+  .t20-block {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.6rem;
+    position: relative; overflow: hidden; margin-bottom: 0.6rem;
+  }
+  .t20-block-title {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--vermelho), var(--vermelho-2));
+    padding: 0.25rem 0.5rem; margin: -0.6rem -0.6rem 0.5rem;
+    text-align: center; border-bottom: 1px solid var(--marrom);
+  }
+  .t20-attrs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin-bottom: 0.6rem; }
+  .t20-attr {
+    border: 1.5px solid var(--marrom);
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border-radius: 3px; padding: 0.35rem 0.25rem; text-align: center;
+  }
+  .t20-attr-name {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 800;
+    color: var(--vermelho); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.15rem;
+  }
+  .t20-attr-value {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; padding: 0.15rem;
+    border-radius: 2px; outline: none; width: 100%; margin-bottom: 0.15rem;
+  }
+  .t20-attr-mod { font-size: 0.72rem; color: var(--texto-suave); font-style: italic; display: block; }
+  .t20-pv-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; margin-bottom: 0.6rem; }
+  .t20-pv-box { border: 2px solid var(--marrom); background: #fffdf5; border-radius: 3px; padding: 0.4rem 0.5rem; }
+  .t20-pv-title {
+    font-family: 'Cinzel', serif; font-size: 0.58rem; font-weight: 700;
+    color: var(--vermelho); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.3rem; text-align: center;
+  }
+  .t20-pv-inputs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.35rem; }
+  .t20-pv-item { text-align: center; }
+  .t20-pv-item span {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.5rem;
+    font-weight: 700; color: var(--marrom); text-transform: uppercase;
+    letter-spacing: 0.04em; margin-bottom: 0.1rem;
+  }
+  .t20-pv-item input {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; padding: 0.15rem;
+    border-radius: 2px; outline: none; width: 100%;
+  }
+  .t20-skills, .t20-attack-table, .t20-equip-table, .t20-spells-table {
+    width: 100%; border-collapse: collapse; font-size: 0.78rem;
+  }
+  .t20-skills th, .t20-attack-table th, .t20-equip-table th, .t20-spells-table th {
+    font-family: 'Cinzel', serif; font-size: 0.5rem; font-weight: 700;
+    color: var(--marrom); text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 0.25rem 0.15rem; border-bottom: 1px solid var(--marrom); text-align: center;
+  }
+  .t20-equip-table th { text-align: left; padding-left: 0.3rem; }
+  .t20-skills td, .t20-attack-table td, .t20-equip-table td, .t20-spells-table td {
+    padding: 0.1rem 0.15rem; border-bottom: 1px dotted rgba(92,58,30,0.15); text-align: center;
+  }
+  .t20-skills td.skill-name {
+    font-family: 'EB Garamond', serif; font-size: 0.82rem;
+    text-align: left; color: var(--marrom-escuro);
+    padding-left: 0.3rem; white-space: nowrap;
+  }
+  .t20-skills input[type="text"], .t20-skills input[type="number"],
+  .t20-attack-table input, .t20-equip-table input, .t20-spells-table input {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 700;
+    color: var(--marrom-escuro); text-align: center;
+    padding: 0.15rem; border-radius: 2px; outline: none; width: 100%; min-width: 0;
+  }
+  .t20-attack-table input, .t20-equip-table input, .t20-spells-table input {
+    border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.82rem;
+    padding: 0.28rem 0.25rem; border-radius: 0;
+  }
+  .t20-skills input[type="checkbox"] { accent-color: var(--vermelho); width: 14px; height: 14px; margin: 0; padding: 0; }
+  .t20-defense { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 0.5rem; }
+  .t20-defense-main {
+    border: 2px solid var(--vermelho);
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border-radius: 3px; padding: 0.5rem; text-align: center;
+  }
+  .t20-defense-main label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.55rem;
+    font-weight: 700; color: var(--vermelho); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.2rem;
+  }
+  .t20-defense-main input {
+    border: none; background: transparent;
+    font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 800;
+    color: var(--vermelho); text-align: center; outline: none; width: 100%;
+  }
+  .t20-defense-sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem; }
+
+  /* ============================================================
+     ORDEM PARANORMAL RPG
+  ============================================================ */
+  .oprpg-sheet {
+    background: #fffaeb;
+    border: 3px double var(--marrom);
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+  .oprpg-sheet::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(184,137,43,0.35);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .oprpg-header {
+    display: grid;
+    grid-template-columns: minmax(0,1fr);
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid var(--vermelho);
+    margin-bottom: 0.9rem;
+    position: relative;
+    padding-top: 3.75rem;
+  }
+  .oprpg-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: clamp(0.95rem, 3.5vw, 1.35rem);
+    letter-spacing: 0.08em;
+    color: var(--pergaminho);
+    text-shadow: 1px 1px 0 var(--dourado);
+    padding: 0.3rem 1rem;
+    background: linear-gradient(90deg, var(--preto), var(--vermelho));
+    border: 2px solid var(--dourado);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .oprpg-field {
+    border: 1.5px solid var(--marrom);
+    background: #fffdf5;
+    padding: 0.35rem 0.5rem;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+  }
+  .oprpg-field-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--marrom);
+    margin-bottom: 0.15rem;
+  }
+  .oprpg-field-input {
+    border: none;
+    background: transparent;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--marrom-escuro);
+    font-weight: 600;
+    outline: none;
+    width: 100%;
+  }
+  .oprpg-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .oprpg-grid {
+    display: grid;
+    grid-template-columns: minmax(0,1fr);
+    gap: 0.75rem;
+    position: relative;
+    z-index: 2;
+  }
+  .oprpg-block {
+    border: 1.5px solid var(--marrom);
+    background: #fffdf5;
+    border-radius: 3px;
+    padding: 0.75rem 0.6rem 0.6rem;
+    position: relative;
+    margin-bottom: 0.65rem;
+  }
+  .oprpg-block-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--preto), var(--vermelho));
+    padding: 0.28rem 0.5rem;
+    margin: -0.75rem -0.6rem 0.6rem;
+    text-align: center;
+    border-bottom: 1px solid var(--dourado);
+  }
+  .oprpg-attrs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0,1fr));
+    gap: 0.35rem;
+  }
+  .oprpg-attr {
+    border: 1.5px solid var(--marrom);
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border-radius: 4px;
+    padding: 0.4rem 0.2rem;
+    text-align: center;
+    position: relative;
+  }
+  .oprpg-attr::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px; right: 3px; bottom: 3px;
+    border: 1px solid rgba(139,30,30,0.15);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .oprpg-attr-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--vermelho);
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+  .oprpg-attr-full {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.6rem;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+  .oprpg-attr-value {
+    border: 1px solid var(--marrom);
+    background: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--vermelho);
+    text-align: center;
+    padding: 0.1rem;
+    border-radius: 3px;
+    outline: none;
+    width: 100%;
+  }
+  .oprpg-status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 0.5rem;
+  }
+  .oprpg-status-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 2px solid var(--marrom);
+    background: #fffdf5;
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+  .oprpg-status-box label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: var(--vermelho);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.3rem;
+    text-align: center;
+  }
+  .oprpg-status-inputs {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 0.25rem;*/
+    align-items: center;
+    font-size: 0.65rem;
+    color: var(--marrom);
+  }
+
+  .oprpg-status-inputs.div-status {
+    display: block;
+    align-items: center;
+    font-size: 0.65rem;
+    color: var(--marrom);
+  }
+
+  .oprpg-status-inputs span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .oprpg-status-inputs input {
+    border: 1px solid var(--marrom);
+    background: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--vermelho);
+    text-align: center;
+    padding: 0.15rem;
+    border-radius: 2px;
+    outline: none;
+    width: 100%;
+  }
+  .oprpg-defense-box {
+    border: 2px solid var(--vermelho);
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border-radius: 4px;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  .oprpg-defense-box label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: var(--vermelho);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.15rem;
+  }
+  .oprpg-defense-box input {
+    border: none;
+    background: transparent;
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--vermelho);
+    text-align: center;
+    outline: none;
+    width: 100%;
+  }
+  .oprpg-defense-formula {
+    font-size: 0.6rem;
+    color: var(--texto-suave);
+    font-style: italic;
+    margin-bottom: 0.3rem;
+  }
+  .oprpg-defense-box input[type="number"] {
+    font-size: 0.85rem;
+    border: 1px solid var(--marrom);
+    border-radius: 3px;
+    padding: 0.2rem;
+    background: #fff;
+    color: var(--marrom-escuro);
+  }
+  .oprpg-skills, .oprpg-attack-table, .oprpg-spells-table, .oprpg-inv-table {
+    width: 100%; border-collapse: collapse; font-size: 0.78rem;
+  }
+  .oprpg-skills th, .oprpg-attack-table th, .oprpg-spells-table th, .oprpg-inv-table th {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--preto), #2a1610);
+    text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 0.28rem 0.25rem; border-bottom: 1px solid var(--dourado);
+    text-align: center;
+  }
+  .oprpg-skills td, .oprpg-attack-table td, .oprpg-spells-table td, .oprpg-inv-table td {
+    padding: 0.05rem 0.15rem;
+    border-bottom: 1px dotted rgba(92,58,30,0.2);
+    text-align: center;
+  }
+  .oprpg-skills td.skill-name {
+    font-family: 'EB Garamond', serif; font-size: 0.82rem;
+    text-align: left; color: var(--marrom-escuro);
+    padding-left: 0.35rem; white-space: nowrap;
+  }
+  .oprpg-skills td.skill-attr {
+    font-family: 'Cinzel', serif; font-size: 0.65rem;
+    font-weight: 700; color: var(--texto-suave);
+  }
+  .oprpg-skills input, .oprpg-attack-table input,
+  .oprpg-spells-table input, .oprpg-inv-table input {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 700;
+    color: var(--marrom-escuro); text-align: center;
+    padding: 0.12rem; border-radius: 2px; outline: none;
+    width: 100%; min-width: 0;
+  }
+  .oprpg-attack-table input, .oprpg-spells-table input, .oprpg-inv-table input {
+    border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.82rem;
+    padding: 0.28rem 0.25rem; border-radius: 0;
+  }
+  .oprpg-skills input[type="checkbox"] {
+    accent-color: var(--vermelho); width: 14px; height: 14px; margin: 0; padding: 0;
+  }
+  .oprpg-inv-header {
+    display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 0.4rem; margin-bottom: 0.4rem;
+  }
+  .oprpg-textarea {
+    width: 100%; border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.9rem;
+    color: var(--marrom-escuro); resize: vertical; outline: none;
+    padding: 0; min-height: 120px;
+  }
+
+  /* MESTRE */
+  .mestre-tabs {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    justify-content: center; margin-bottom: 1.5rem;
+  }
+  .mestre-tabs button {
+    background: rgba(255,255,255,0.6); border: 1.5px solid var(--marrom);
+    color: var(--marrom); font-family: 'Cinzel', serif; font-weight: 700;
+    font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;
+    transition: var(--transition); display: flex; align-items: center; gap: 0.4rem;
+  }
+  .mestre-tabs button:hover { background: var(--pergaminho-2); }
+  .mestre-tabs button.active {
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+    color: var(--pergaminho); border-color: var(--dourado);
+  }
+  .mestre-panel { display: none; }
+  .mestre-panel.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .gm-card {
+    background: #fffaeb; border: 2px double var(--marrom);
+    border-radius: 6px; padding: 1.25rem; box-shadow: var(--shadow);
+    margin-bottom: 1rem; position: relative; overflow: hidden;
+  }
+  .gm-card-title {
+    font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--vermelho), var(--vermelho-2));
+    padding: 0.4rem 0.75rem; margin: -1.25rem -1.25rem 1rem;
+    text-align: center; border-bottom: 1.5px solid var(--dourado);
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 0.6rem; margin-bottom: 1rem; }
+  .die-btn {
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border: 2px solid var(--marrom); border-radius: 10px;
+    padding: 0.9rem 0.5rem; text-align: center; cursor: pointer;
+    transition: var(--transition); font-family: 'Cinzel', serif;
+    color: var(--marrom-escuro); font-weight: 700; font-size: 0.85rem;
+  }
+  .die-btn:hover {
+    transform: translateY(-3px); border-color: var(--vermelho);
+    box-shadow: 0 8px 18px -8px rgba(139,30,30,0.5);
+  }
+  .die-btn i { display: block; font-size: 1.6rem; color: var(--vermelho); margin-bottom: 0.3rem; }
+  .dice-result {
+    text-align: center; padding: 1.5rem;
+    background: linear-gradient(135deg, var(--preto), #2a1610);
+    border: 2px solid var(--dourado); border-radius: 8px;
+    color: var(--dourado-2); font-family: 'Cinzel', serif;
+  }
+  .dice-result .result-value {
+    font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800;
+    line-height: 1; color: var(--dourado-2);
+    text-shadow: 0 0 20px rgba(212,164,68,0.5);
+    display: block; margin-bottom: 0.3rem;
+  }
+  .dice-result .result-label {
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--pergaminho-2); opacity: 0.8;
+  }
+  .dice-history { list-style: none; padding: 0; margin: 0.75rem 0 0; max-height: 180px; overflow-y: auto; }
+  .dice-history li {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.35rem 0.5rem; border-bottom: 1px dotted rgba(92,58,30,0.25);
+    font-size: 0.82rem; color: var(--texto-suave);
+  }
+  .dice-history li strong { color: var(--vermelho); font-family: 'Cinzel', serif; font-size: 0.9rem; }
+  .init-list { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .init-item {
+    display: grid; grid-template-columns: 30px 1fr 70px 40px;
+    gap: 0.5rem; align-items: center; padding: 0.5rem;
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 4px; margin-bottom: 0.4rem; transition: var(--transition);
+  }
+  .init-item.current {
+    border-color: var(--vermelho);
+    background: linear-gradient(90deg, rgba(139,30,30,0.08), transparent);
+    box-shadow: 0 4px 12px -6px rgba(139,30,30,0.4);
+  }
+  .init-pos { text-align: center; font-family: 'Cinzel', serif; font-weight: 800; color: var(--vermelho); font-size: 1rem; }
+  .init-name { font-family: 'EB Garamond', serif; font-weight: 600; color: var(--marrom-escuro); }
+  .init-value {
+    font-family: 'Cinzel', serif; font-weight: 700; color: var(--dourado);
+    text-align: center; background: var(--preto); border-radius: 4px;
+    padding: 0.2rem; font-size: 0.95rem;
+  }
+  .init-remove {
+    background: transparent; border: none; color: var(--vermelho);
+    cursor: pointer; font-size: 1rem; padding: 0.2rem; border-radius: 4px;
+    transition: var(--transition);
+  }
+  .init-remove:hover { background: rgba(139,30,30,0.1); }
+
+  /* MONSTROS — ACORDEÃO */
+  .monsters-container { display: flex; flex-direction: column; gap: 0.75rem; }
+  .monster-accordion {
+    background: #fffaeb; border: 2px double var(--marrom);
+    border-radius: 6px; overflow: hidden; box-shadow: var(--shadow);
+    transition: box-shadow 0.3s ease;
+  }
+  .monster-accordion.expanded { box-shadow: 0 15px 40px -10px rgba(26,15,8,0.5); }
+  .monster-accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 0.6rem; padding: 0.85rem 1rem; cursor: pointer; user-select: none;
+    background: linear-gradient(90deg, var(--preto), #2a1610);
+    color: var(--dourado-2); border-bottom: 2px solid var(--dourado);
+    transition: background 0.3s ease; flex-wrap: wrap;
+  }
+  .monster-accordion-header:hover { background: linear-gradient(90deg, #1a1008, #3a1e14); }
+  .monster-accordion-title { display: flex; align-items: center; gap: 0.75rem; flex: 1 1 auto; min-width: 0; }
+  .monster-accordion-title i.biome-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--vermelho-2), var(--vermelho));
+    border: 2px solid var(--dourado);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--dourado-2); font-size: 1rem; flex-shrink: 0;
+  }
+  .monster-accordion-title h3 {
+    margin: 0; font-family: 'Cinzel', serif; font-size: 1.05rem;
+    font-weight: 700; color: var(--dourado-2); letter-spacing: 0.04em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .monster-accordion-title .monster-subtitle {
+    font-size: 0.72rem; color: rgba(237,224,196,0.7);
+    font-family: 'EB Garamond', serif; font-style: italic;
+    display: block; margin-top: 0.1rem; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .monster-accordion-actions { display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0; }
+  .monster-accordion-actions button {
+    background: rgba(232,220,200,0.1); border: 1px solid rgba(232,220,200,0.25);
+    color: var(--dourado-2); width: 34px; height: 34px;
+    border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease; padding: 0;
+  }
+  .monster-accordion-actions button:hover {
+    background: var(--vermelho); border-color: var(--dourado);
+    color: var(--pergaminho); transform: translateY(-2px);
+  }
+  .monster-accordion-actions button.danger:hover { background: #5a0e0e; }
+  .monster-accordion-actions .chevron { transition: transform 0.3s ease; }
+  .monster-accordion.expanded .chevron { transform: rotate(180deg); }
+  .monster-accordion-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+    background: #fffaeb; position: relative;
+  }
+  .monster-accordion.expanded .monster-accordion-body { max-height: 20000px; }
+  .monster-accordion-inner { margin-top: 1rem; padding: 1rem; position: relative; }
+  .monster-accordion-inner::before {
+    content: ''; position: absolute; inset: 5px;
+    border: 1px solid rgba(184,137,43,0.35);
+    border-radius: 3px; pointer-events: none;
+  }
+  .monster-accordion-inner .monster-brand { top: -0.85rem; right: 1rem; }
+  .monsters-empty {
+    text-align: center; padding: 3rem 1rem;
+    border: 2px dashed var(--marrom); border-radius: 6px;
+    background: rgba(255,250,235,0.5); color: var(--texto-suave);
+    font-style: italic;
+  }
+  .monsters-empty i { display: block; font-size: 2.5rem; color: var(--marrom); margin-bottom: 0.75rem; opacity: 0.5; }
+  .monsters-empty h4 { font-family: 'Cinzel', serif; color: var(--marrom-escuro); margin-bottom: 0.5rem; }
+
+  /* MONSTRO (ficha) */
+  .monster-brand {
+    position: absolute; top: -0.85rem; right: 1rem;
+    background: var(--preto); color: var(--dourado-2);
+    font-family: 'Cinzel', serif; font-size: 0.62rem;
+    font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.25rem 0.7rem; border: 1px solid var(--dourado);
+    border-radius: 3px; z-index: 3;
+  }
+  .monster-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem; position: relative; z-index: 2;
+  }
+  .monster-block {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.75rem 0.6rem 0.6rem; position: relative;
+  }
+  .monster-block-title {
+    font-family: 'Cinzel', serif; font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--preto), #2a1610);
+    padding: 0.25rem 0.5rem; margin: -0.75rem -0.6rem 0.6rem;
+    text-align: center; border-bottom: 1px solid var(--dourado);
+  }
+  .monster-attrs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; }
+  .monster-attr {
+    border: 1.5px solid var(--marrom);
+    background: linear-gradient(180deg, #fff, var(--pergaminho-2));
+    border-radius: 3px; padding: 0.4rem 0.25rem; text-align: center;
+  }
+  .monster-attr-name {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 800;
+    color: var(--vermelho); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.15rem;
+  }
+  .monster-attr-value {
+    border: 1px solid var(--marrom); background: #fff;
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--vermelho); text-align: center; padding: 0.15rem;
+    border-radius: 2px; outline: none; width: 100%;
+  }
+  .stat-box {
+    border: 2px solid var(--marrom); background: #fffdf5;
+    border-radius: 4px; padding: 0.5rem; text-align: center;
+  }
+  .stat-box label {
+    display: block; font-family: 'Cinzel', serif; font-size: 0.56rem;
+    font-weight: 700; color: var(--vermelho); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.25rem;
+  }
+  .stat-box input {
+    border: none; background: transparent;
+    font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 800;
+    color: var(--vermelho); text-align: center; outline: none; width: 100%; padding: 0;
+  }
+  .monster-field {
+    border: 1.5px solid var(--marrom); background: #fffdf5;
+    border-radius: 3px; padding: 0.35rem 0.5rem;
+    display: flex; flex-direction: column; min-width: 0; width: 100%;
+  }
+  .monster-field label {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--marrom); margin-bottom: 0.15rem;
+  }
+  .monster-field input, .monster-field select {
+    border: none; background: transparent; font-family: 'EB Garamond', serif;
+    font-size: 0.95rem; color: var(--marrom-escuro); font-weight: 600;
+    outline: none; width: 100%;
+  }
+  .monster-textarea {
+    width: 100%; border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.92rem;
+    color: var(--marrom-escuro); resize: vertical; outline: none;
+    padding: 0; min-height: 90px;
+  }
+  .monster-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .monster-table th {
+    font-family: 'Cinzel', serif; font-size: 0.52rem; font-weight: 700;
+    color: var(--marrom); text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 0.3rem 0.25rem; border-bottom: 1px solid var(--marrom); text-align: left;
+  }
+  .monster-table td { padding: 0; border-bottom: 1px dotted rgba(92,58,30,0.25); }
+  .monster-table input {
+    width: 100%; border: none; background: transparent;
+    font-family: 'EB Garamond', serif; font-size: 0.85rem;
+    padding: 0.3rem 0.25rem; outline: none; color: var(--marrom-escuro);
+  }
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+  .ref-table th {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 700;
+    color: var(--pergaminho);
+    background: linear-gradient(90deg, var(--marrom), var(--marrom-escuro));
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 0.4rem 0.5rem; text-align: left;
+  }
+  .ref-table td { padding: 0.4rem 0.5rem; border-bottom: 1px dotted rgba(92,58,30,0.25); color: var(--texto); }
+  .ref-table tr:nth-child(even) td { background: rgba(184,137,43,0.05); }
+  .ref-table td strong { color: var(--vermelho); font-family: 'Cinzel', serif; }
+
+  /* TOAST + TOPO */
+  .toast-save {
+    position: fixed; bottom: 12px; left: 12px; right: 12px;
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+    color: var(--pergaminho); padding: 0.7rem 1rem;
+    border-radius: 6px; border: 1.5px solid var(--dourado);
+    font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    box-shadow: 0 10px 30px -10px rgba(139,30,30,0.8);
+    transform: translateY(150%); transition: transform 0.4s ease;
+    z-index: 9999; text-align: center; max-width: calc(100% - 24px);
+  }
+  .toast-save.show { transform: translateY(0); }
+  .back-to-top {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--vermelho), var(--vermelho-2));
+    color: var(--pergaminho); border: 2px solid var(--dourado);
+    box-shadow: 0 8px 24px -8px rgba(139,30,30,0.8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; cursor: pointer; z-index: 9000;
+    opacity: 0; visibility: hidden;
+    transform: translateY(20px) scale(0.85);
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-to-top:hover {
+    background: linear-gradient(135deg, var(--vermelho-2), var(--vermelho));
+    color: var(--dourado-2); transform: translateY(-4px) scale(1.05);
+  }
+  .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+  @media (max-width: 576px) {
+    .back-to-top { width: 46px; height: 46px; bottom: 16px; right: 16px; font-size: 1rem; }
+    .monster-accordion-title h3 { font-size: 0.9rem; }
+    .monster-accordion-title .monster-subtitle { font-size: 0.65rem; }
+    .monster-accordion-actions button { width: 30px; height: 30px; font-size: 0.75rem; }
+    .monster-accordion-header { padding: 0.65rem 0.75rem; }
+    .monster-accordion-inner { padding: 0.75rem; }
+  }
+  .toast-save.show ~ .back-to-top { bottom: 80px; }
+
+  footer {
+    background: var(--marrom-escuro); color: var(--pergaminho-2);
+    padding: 1.75rem 0.75rem 1rem;
+    border-top: 4px double var(--dourado); margin-top: 1rem; text-align: center;
+  }
+  footer h5 {
+    color: var(--dourado-2); font-family: 'Cinzel', serif;
+    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6rem;
+  }
+  footer p { color: rgba(237,224,196,0.75); font-size: 0.82rem; }
+
+  @media (min-width: 700px) {
+    section { padding: 2rem 0; }
+    .container { padding-left: 1rem; padding-right: 1rem; }
+    .sheet-wrap { padding: 1rem; } .t20-sheet { padding: 1rem; }
+    
+    .sheet-header.primary {
+        padding-top: 3.75rem;
+    }
+    .sheet-header, .sheet-header.secondary, .page2-header { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sheet-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sheet-grid > div:nth-child(2) { grid-column: 1 / -1; }
+    .page2-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .attr-block { flex-direction: row; align-items: center; gap: 0.4rem; }
+    .attr-name {
+      flex: 0 0 80px; text-align: left;
+      border-right: 1px dotted var(--marrom); border-bottom: none;
+      padding-right: 0.4rem; padding-bottom: 0;
+    }
+    .attr-values { flex: 1 1 auto; }
+    .combat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .hp-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .spell-slots { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .page-header .d-flex { flex-direction: row; width: auto; }
+    .page-header .btn { width: auto; }
+    .t20-header { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); padding-top: 3.75rem; }
+    .t20-title {
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%); width: auto;
+      margin-bottom: 0; padding: 0.3rem 1.2rem;
+    }
+    .t20-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .t20-attrs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .monster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .monster-grid .full { grid-column: 1 / -1; }
+    .monster-attrs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .init-item { grid-template-columns: 40px 1fr 90px 40px; }
+    .oprpg-header { grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); }
+    .oprpg-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .oprpg-col-mid { grid-column: 1 / -1; }
+    .oprpg-status-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .oprpg-inv-header { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  }
+  @media (min-width: 1000px) {
+    .container { max-width: 1280px; }
+    section { padding: 2.5rem 0; }
+    .sheet-wrap { padding: 1.2rem; } .t20-sheet { padding: 1.2rem; }
+    .sheet-header { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .sheet-header.secondary, .page2-header { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sheet-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr); }
+    .sheet-grid > div:nth-child(2) { grid-column: auto; }
+    .spell-slots { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    .t20-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr); }
+    .t20-header { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+    .monster-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .monster-grid .half { grid-column: span 2; }
+    .oprpg-grid { grid-template-columns: minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); }
+    .oprpg-col-mid { grid-column: auto; }
+  }
+  @media (max-width: 700px) {
+    .oprpg-attrs { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  }
+  @media (max-width: 360px) {
+    .container { padding-left: 0.5rem; padding-right: 0.5rem; }
+    .check-item .name { font-size: 0.8rem; }
+    .check-item .mod { width: 34px; flex: 0 0 34px; }
+    .btn { font-size: 0.65rem; padding: 0.55rem 0.9rem; }
+  }
+  @media print {
+    .navbar, footer, .page-header .d-flex, .page-header .section-label,
+    .toast-save, .back-to-top, .save-indicator, .mestre-tabs, .system-selector,
+    .monster-accordion-actions { display: none !important; }
+    .page-header { padding: 0.5rem 0; }
+    body { background: #fff !important; }
+    .sheet-wrap, .t20-sheet, .gm-card, .monster-accordion, .oprpg-sheet {
+      box-shadow: none; border: 1.5px solid #000; page-break-inside: avoid;
+    }
+    .monster-accordion-body { max-height: none !important; }
+  }
+</style>
+</head>
+<body>
+    <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#" onclick="showArea('herois'); return false;">
+        <span class="brand-icon"><i class="fas fa-dice-d20"></i></span>
+        Forja de RPG
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" data-area="herois" onclick="showArea('herois'); return false;">
+              <i class="fas fa-shield-halved me-1"></i>Forja de Heróis
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-area="mestre" onclick="showArea('mestre'); return false;">
+              <i class="fas fa-book-skull me-1"></i>Forja do Mestre
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-area="monstros" onclick="showArea('monstros'); return false;">
+              <i class="fas fa-dragon me-1"></i>Forja dos Monstros
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ÁREA 1: HERÓIS -->
+  <div id="area-herois" class="area-panel">
+    <div class="page-header" id="ficha">
+      <span class="section-label">Ficha de Personagem</span>
+      <h1 id="pageTitle">Forje seu Herói</h1>
+      <p id="pageSubtitle" style="color:var(--texto-suave); font-style:italic; max-width:620px; margin:0.5rem auto 0; font-size:0.95rem;">
+        Preencha, salve e leve para a mesa. Auto-save ativado.
+      </p>
+      <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
+        <button class="btn btn-vermelho" onclick="saveAll()"><i class="fas fa-bookmark me-2"></i>Salvar</button>
+        <!--<button class="btn btn-dourado" onclick="window.print()"><i class="fas fa-print me-2"></i>Imprimir</button> -->
+        <button class="btn btn-outline-marrom" onclick="exportSheet()"><i class="fas fa-file-export me-2"></i>Exportar</button>
+        <button class="btn btn-outline-marrom" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i>Importar</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importSheet(this)">
+        <!--<button class="btn btn-outline-marrom" id="btnLimparAtual" onclick="resetAll()"><i class="fas fa-rotate-left me-2"></i>Limpar Esta Ficha</button>-->
+        <button class="btn btn-outline-marrom" onclick="clearAllSystems()"><i class="fas fa-trash me-2"></i>Limpar Tudo</button>
+      </div>
+      <p id="saveIndicator" class="save-indicator">Nenhum salvamento ainda</p>
+    </div>
+
+    <div class="system-selector" role="tablist">
+      <button type="button" class="active" data-system="dnd5e" role="tab" aria-selected="true"><i class="fas fa-dice-d20 me-1"></i>D&D 5e</button>
+      <button type="button" data-system="t20" role="tab" aria-selected="false"><i class="fas fa-dragon me-1"></i>Tormenta 20</button>
+      <button type="button" data-system="oprpg" role="tab" aria-selected="false"><i class="fas fa-eye me-1"></i>Ordem Paranormal</button>
+    </div>
+
+    <!-- SISTEMA: D&D 5e -->
+    <div id="system-dnd5e" class="system-panel">
+      <section style="padding-top: 1rem;">
+        <div class="container">
+          <div class="text-center mb-3">
+            <button class="btn btn-outline-marrom" onclick="resetSystem('dnd5e')"><i class="fas fa-rotate-left me-2"></i>Limpar Ficha de D&D 5e</button>
+          </div>
+
+          <div class="sheet-wrap">
+            <div class="sheet-header primary">
+              <div class="t20-title">D&D</div>
+              <div class="field"><span class="field-label">Nome do Personagem</span><input class="field-input" id="nome" placeholder="Nome do herói"></div>
+              <div class="field"><span class="field-label">Classe e Nível</span><input class="field-input" id="classeNivel" placeholder="Ex.: Mago 3"></div>
+              <div class="field"><span class="field-label">Antecedente</span><input class="field-input" id="antecedente" placeholder="Ex.: Sábio"></div>
+              <div class="field"><span class="field-label">Nome do Jogador</span><input class="field-input" id="jogador" placeholder="Seu nome"></div>
+            </div>
+            <div class="sheet-header secondary">
+              <div class="field"><span class="field-label">Raça</span><input class="field-input" id="raca" placeholder="Ex.: Elfo"></div>
+              <div class="field"><span class="field-label">Tendência</span><input class="field-input" id="tendencia" placeholder="Ex.: Neutro e Bom"></div>
+              <div class="field"><span class="field-label">XP</span><input class="field-input" id="xp" placeholder="0"></div>
+              <div class="field"><span class="field-label">Idade / Altura / Peso</span><input class="field-input" id="fisico" placeholder="120 anos · 1,75m · 65kg"></div>
+            </div>
+
+            <div class="sheet-grid">
+              <div>
+                <div class="attr-block"><div class="attr-name">Força</div><div class="attr-values"><input class="attr-value-input" id="forca" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="forcaMod" value="+0" readonly></div></div>
+                <div class="attr-block"><div class="attr-name">Destreza</div><div class="attr-values"><input class="attr-value-input" id="destreza" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="destrezaMod" value="+0" readonly></div></div>
+                <div class="attr-block"><div class="attr-name">Constituição</div><div class="attr-values"><input class="attr-value-input" id="constituicao" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="constituicaoMod" value="+0" readonly></div></div>
+                <div class="attr-block"><div class="attr-name">Inteligência</div><div class="attr-values"><input class="attr-value-input" id="inteligencia" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="inteligenciaMod" value="+0" readonly></div></div>
+                <div class="attr-block"><div class="attr-name">Sabedoria</div><div class="attr-values"><input class="attr-value-input" id="sabedoria" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="sabedoriaMod" value="+0" readonly></div></div>
+                <div class="attr-block"><div class="attr-name">Carisma</div><div class="attr-values"><input class="attr-value-input" id="carisma" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="carismaMod" value="+0" readonly></div></div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-bottom:0.65rem;">
+                  <div class="combat-cell"><label>Inspiração</label><input type="number" id="inspiracao" value="0"></div>
+                  <div class="combat-cell"><label>Prof.</label><input type="number" id="profBonus" value="2"></div>
+                </div>
+
+                <div class="block">
+                  <div class="block-title">Testes de Resistência</div>
+                  <ul class="check-list">
+                    <li class="check-item"><input type="checkbox" id="resForca"><input class="mod" value="+0"><span class="name">Força</span></li>
+                    <li class="check-item"><input type="checkbox" id="resDestreza"><input class="mod" value="+0"><span class="name">Destreza</span></li>
+                    <li class="check-item"><input type="checkbox" id="resConstituicao"><input class="mod" value="+0"><span class="name">Constituição</span></li>
+                    <li class="check-item"><input type="checkbox" id="resInteligencia"><input class="mod" value="+0"><span class="name">Inteligência</span></li>
+                    <li class="check-item"><input type="checkbox" id="resSabedoria"><input class="mod" value="+0"><span class="name">Sabedoria</span></li>
+                    <li class="check-item"><input type="checkbox" id="resCarisma"><input class="mod" value="+0"><span class="name">Carisma</span></li>
+                  </ul>
+                </div>
+
+                <div class="block">
+                  <div class="block-title">Perícias</div>
+                  <ul class="check-list">
+                    <li class="check-item"><input type="checkbox" id="perAcrobacia"><input class="mod" value="+0"><span class="name">Acrobacia</span><span class="attr-ref">(Des)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perArcanismo"><input class="mod" value="+0"><span class="name">Arcanismo</span><span class="attr-ref">(Int)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perAtletismo"><input class="mod" value="+0"><span class="name">Atletismo</span><span class="attr-ref">(For)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perAtuacao"><input class="mod" value="+0"><span class="name">Atuação</span><span class="attr-ref">(Car)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perBlefar"><input class="mod" value="+0"><span class="name">Blefar</span><span class="attr-ref">(Car)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perFurtividade"><input class="mod" value="+0"><span class="name">Furtividade</span><span class="attr-ref">(Des)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perHistoria"><input class="mod" value="+0"><span class="name">História</span><span class="attr-ref">(Int)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perIntimidacao"><input class="mod" value="+0"><span class="name">Intimidação</span><span class="attr-ref">(Car)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perIntuicao"><input class="mod" value="+0"><span class="name">Intuição</span><span class="attr-ref">(Sab)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perInvestigacao"><input class="mod" value="+0"><span class="name">Investigação</span><span class="attr-ref">(Int)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perLidarAnimais"><input class="mod" value="+0"><span class="name">Lidar com Animais</span><span class="attr-ref">(Sab)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perMedicina"><input class="mod" value="+0"><span class="name">Medicina</span><span class="attr-ref">(Sab)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perNatureza"><input class="mod" value="+0"><span class="name">Natureza</span><span class="attr-ref">(Int)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perPercepcao"><input class="mod" value="+0"><span class="name">Percepção</span><span class="attr-ref">(Sab)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perPersuasao"><input class="mod" value="+0"><span class="name">Persuasão</span><span class="attr-ref">(Car)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perPrestidigitacao"><input class="mod" value="+0"><span class="name">Prestidigitação</span><span class="attr-ref">(Des)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perReligiao"><input class="mod" value="+0"><span class="name">Religião</span><span class="attr-ref">(Int)</span></li>
+                    <li class="check-item"><input type="checkbox" id="perSobrevivencia"><input class="mod" value="+0"><span class="name">Sobrevivência</span><span class="attr-ref">(Sab)</span></li>
+                  </ul>
+                </div>
+
+                <div class="block">
+                  <div class="block-title">Sabedoria Passiva</div>
+                  <input class="field-input" id="sabPassiva" style="text-align:center; font-size:1.05rem; color:var(--vermelho); font-weight:700;" placeholder="10">
+                </div>
+              </div>
+
+              <div>
+                <div class="combat-row">
+                  <div class="combat-cell"><label>CA</label><input type="number" id="ca" value="10"></div>
+                  <div class="combat-cell"><label>Iniciativa</label><input type="number" id="iniciativa" value="0"></div>
+                  <div class="combat-cell"><label>Desloc.</label><input type="number" id="deslocamento" value="9"></div>
+                </div>
+
+                <div class="hp-block">
+                  <div class="block-title" style="margin-top:-0.75rem;">Pontos de Vida</div>
+                  <div class="hp-row">
+                    <div class="hp-cell"><span>PV Totais</span><input type="number" id="pvTotal" value="10"></div>
+                    <div class="hp-cell"><span>PV Atuais</span><input type="number" id="pvAtual" value="10"></div>
+                  </div>
+                  <div class="hp-row">
+                    <div class="hp-cell" style="grid-column: span 2;"><span>PV Temporários</span><input type="number" id="pvTemp" value="0"></div>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-bottom:0.65rem;">
+                  <div class="combat-cell"><label>Dados de Vida</label><input id="dadosVida" placeholder="Ex.: 3d8"></div>
+                  <div class="combat-cell">
+                    <label>Testes contra Morte</label>
+                    <div style="font-size:0.72rem; display:flex; justify-content:space-around; gap:0.3rem; margin-top:0.25rem; flex-wrap:wrap;">
+                      <span>Sucessos: <input type="number" id="morteSuc" value="0" style="width:32px; border:1px solid var(--marrom); text-align:center; background:#fff; border-radius:2px;"></span>
+                      <span>Falhas: <input type="number" id="morteFal" value="0" style="width:32px; border:1px solid var(--marrom); text-align:center; background:#fff; border-radius:2px;"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="block">
+                  <div class="block-title">Ataques e Magias</div>
+                  <div class="table-scroll">
+                    <table class="attack-table">
+                      <thead><tr><th style="width:45%;">Nome</th><th style="width:20%;">Bônus</th><th>Dano / Tipo</th></tr></thead>
+                      <tbody>
+                        <tr><td><input id="atk1_nome"></td><td><input id="atk1_bonus"></td><td><input id="atk1_dano"></td></tr>
+                        <tr><td><input id="atk2_nome"></td><td><input id="atk2_bonus"></td><td><input id="atk2_dano"></td></tr>
+                        <tr><td><input id="atk3_nome"></td><td><input id="atk3_bonus"></td><td><input id="atk3_dano"></td></tr>
+                        <tr><td><input id="atk4_nome"></td><td><input id="atk4_bonus"></td><td><input id="atk4_dano"></td></tr>
+                        <tr><td><input id="atk5_nome"></td><td><input id="atk5_bonus"></td><td><input id="atk5_dano"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="big-block"><label>Equipamento</label><textarea id="equipamento" rows="5"></textarea></div>
+                <div class="big-block" style="margin-top:0.65rem;"><label>Idiomas e Outras Proficiências</label><textarea id="idiomas" rows="3"></textarea></div>
+              </div>
+
+              <div>
+                <div class="trait-block"><label>Traços de Personalidade</label><textarea id="tracos" rows="4"></textarea></div>
+                <div class="trait-block"><label>Ideais</label><textarea id="ideais" rows="3"></textarea></div>
+                <div class="trait-block"><label>Ligações</label><textarea id="ligacoes" rows="3"></textarea></div>
+                <div class="trait-block"><label>Defeitos</label><textarea id="defeitos" rows="3"></textarea></div>
+                <div class="big-block" style="margin-top:0.65rem;"><label>Características e Habilidades</label><textarea id="caracteristicas" rows="8"></textarea></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sheet-wrap">
+            <div class="page2-header">
+              <div class="field"><span class="field-label">Nome do Personagem</span><input class="field-input" id="nome2"></div>
+              <div class="field"><span class="field-label">Idade / Altura / Peso</span><input class="field-input" id="fisico2"></div>
+              <div class="field"><span class="field-label">Olhos / Pele / Cabelos</span><input class="field-input" id="aparenciaFisica"></div>
+            </div>
+            <div class="page2-grid">
+              <div class="big-block"><label>Aparência</label><textarea id="aparencia" rows="10"></textarea></div>
+              <div class="big-block"><label>Aliados e Organizações</label><textarea id="aliados" rows="4"></textarea></div>
+              <div class="big-block"><label>Símbolo</label><textarea id="simbolo" rows="3"></textarea></div>
+              <div class="big-block"><label>Outras Características</label><textarea id="outrasCarac" rows="4"></textarea></div>
+              <div class="big-block"><label>História do Personagem</label><textarea id="historia" rows="10"></textarea></div>
+              <div class="big-block"><label>Tesouro</label><textarea id="tesouro" rows="4"></textarea></div>
+            </div>
+          </div>
+
+          <div class="sheet-wrap">
+            <h3 style="text-align:center; margin-bottom:1.25rem; font-family:'Cinzel',serif; font-size:clamp(1.1rem,3vw,1.5rem);">
+              <i class="fas fa-hat-wizard" style="color:var(--vermelho);"></i> Grimório
+            </h3>
+            <div class="spell-slots">
+              <div class="slot-box"><label>Truques</label><input type="number" id="slot0" value="0"></div>
+              <div class="slot-box"><label>Nível 1</label><input type="number" id="slot1" value="0"></div>
+              <div class="slot-box"><label>Nível 2</label><input type="number" id="slot2" value="0"></div>
+              <div class="slot-box"><label>Nível 3</label><input type="number" id="slot3" value="0"></div>
+              <div class="slot-box"><label>Nível 4</label><input type="number" id="slot4" value="0"></div>
+              <div class="slot-box"><label>Nível 5</label><input type="number" id="slot5" value="0"></div>
+              <div class="slot-box"><label>Nível 6</label><input type="number" id="slot6" value="0"></div>
+              <div class="slot-box"><label>Nível 7</label><input type="number" id="slot7" value="0"></div>
+              <div class="slot-box"><label>Nível 8</label><input type="number" id="slot8" value="0"></div>
+              <div class="slot-box"><label>Nível 9</label><input type="number" id="slot9" value="0"></div>
+            </div>
+
+            <div class="spell-level-header">Truques</div>
+            <div class="table-scroll">
+              <table class="spell-table">
+                <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+                <tbody>
+                  <tr><td><input id="magia0_1_nome"></td><td><input id="magia0_1_tempo"></td><td><input id="magia0_1_alcance"></td><td><input id="magia0_1_efeito"></td></tr>
+                  <tr><td><input id="magia0_2_nome"></td><td><input id="magia0_2_tempo"></td><td><input id="magia0_2_alcance"></td><td><input id="magia0_2_efeito"></td></tr>
+                  <tr><td><input id="magia0_3_nome"></td><td><input id="magia0_3_tempo"></td><td><input id="magia0_3_alcance"></td><td><input id="magia0_3_efeito"></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spell-level-header">1º Nível</div>
+            <div class="table-scroll">
+              <table class="spell-table">
+                <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+                <tbody>
+                  <tr><td><input id="magia1_1_nome"></td><td><input id="magia1_1_tempo"></td><td><input id="magia1_1_alcance"></td><td><input id="magia1_1_efeito"></td></tr>
+                  <tr><td><input id="magia1_2_nome"></td><td><input id="magia1_2_tempo"></td><td><input id="magia1_2_alcance"></td><td><input id="magia1_2_efeito"></td></tr>
+                  <tr><td><input id="magia1_3_nome"></td><td><input id="magia1_3_tempo"></td><td><input id="magia1_3_alcance"></td><td><input id="magia1_3_efeito"></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spell-level-header">2º Nível</div>
+            <div class="table-scroll">
+              <table class="spell-table">
+                <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+                <tbody>
+                  <tr><td><input id="magia2_1_nome"></td><td><input id="magia2_1_tempo"></td><td><input id="magia2_1_alcance"></td><td><input id="magia2_1_efeito"></td></tr>
+                  <tr><td><input id="magia2_2_nome"></td><td><input id="magia2_2_tempo"></td><td><input id="magia2_2_alcance"></td><td><input id="magia2_2_efeito"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+        <!-- SISTEMA: TORMENTA 20 -->
+    <div id="system-t20" class="system-panel" style="display:none;">
+      <section style="padding-top: 1rem;">
+        <div class="container">
+          <div class="text-center mb-3">
+            <button class="btn btn-outline-marrom" onclick="resetSystem('t20')"><i class="fas fa-rotate-left me-2"></i>Limpar Ficha de Tormenta 20</button>
+          </div>
+
+          <div class="t20-sheet">
+            <div class="t20-header">
+              <div class="t20-title">TORMENTA 20</div>
+              <div class="t20-field full"><span class="t20-field-label">Personagem</span><input class="t20-field-input" id="t20_nome"></div>
+              <div class="t20-field"><span class="t20-field-label">Jogador</span><input class="t20-field-input" id="t20_jogador"></div>
+              <div class="t20-field"><span class="t20-field-label">Raça</span><input class="t20-field-input" id="t20_raca"></div>
+              <div class="t20-field"><span class="t20-field-label">Origem</span><input class="t20-field-input" id="t20_origem"></div>
+              <div class="t20-field"><span class="t20-field-label">Classe & Nível</span><input class="t20-field-input" id="t20_classeNivel"></div>
+              <div class="t20-field"><span class="t20-field-label">Divindade</span><input class="t20-field-input" id="t20_divindade"></div>
+              <div class="t20-field"><span class="t20-field-label">Deslocamento</span><input class="t20-field-input" id="t20_deslocamento"></div>
+            </div>
+
+            <div class="t20-grid">
+              <div class="t20-col-left">
+                <div class="t20-block">
+                  <div class="t20-block-title">Atributos</div>
+                  <div class="t20-attrs">
+                    <div class="t20-attr"><div class="t20-attr-name">FOR</div><input type="number" class="t20-attr-value" id="t20_for" value="10"><span class="t20-attr-mod" id="t20_for_mod">+0</span></div>
+                    <div class="t20-attr"><div class="t20-attr-name">DES</div><input type="number" class="t20-attr-value" id="t20_des" value="10"><span class="t20-attr-mod" id="t20_des_mod">+0</span></div>
+                    <div class="t20-attr"><div class="t20-attr-name">CON</div><input type="number" class="t20-attr-value" id="t20_con" value="10"><span class="t20-attr-mod" id="t20_con_mod">+0</span></div>
+                    <div class="t20-attr"><div class="t20-attr-name">INT</div><input type="number" class="t20-attr-value" id="t20_int" value="10"><span class="t20-attr-mod" id="t20_int_mod">+0</span></div>
+                    <div class="t20-attr"><div class="t20-attr-name">SAB</div><input type="number" class="t20-attr-value" id="t20_sab" value="10"><span class="t20-attr-mod" id="t20_sab_mod">+0</span></div>
+                    <div class="t20-attr"><div class="t20-attr-name">CAR</div><input type="number" class="t20-attr-value" id="t20_car" value="10"><span class="t20-attr-mod" id="t20_car_mod">+0</span></div>
+                  </div>
+                </div>
+
+                <div class="t20-pv-row">
+                  <div class="t20-pv-box">
+                    <div class="t20-pv-title">Pontos de Vida</div>
+                    <div class="t20-pv-inputs">
+                      <div class="t20-pv-item"><span>Máx</span><input type="number" id="t20_pv_max" value="20"></div>
+                      <div class="t20-pv-item"><span>Atuais</span><input type="number" id="t20_pv_atual" value="20"></div>
+                    </div>
+                  </div>
+                  <div class="t20-pv-box">
+                    <div class="t20-pv-title">Pontos de Mana</div>
+                    <div class="t20-pv-inputs">
+                      <div class="t20-pv-item"><span>Máx</span><input type="number" id="t20_pm_max" value="10"></div>
+                      <div class="t20-pv-item"><span>Atuais</span><input type="number" id="t20_pm_atual" value="10"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="t20-block">
+                  <div class="t20-block-title">Ataques</div>
+                  <div class="table-scroll">
+                    <table class="t20-attack-table">
+                      <thead><tr><th style="width:30%;">Ataque</th><th style="width:15%;">Teste</th><th style="width:15%;">Dano</th><th style="width:13%;">Crít</th><th style="width:13%;">Tipo</th><th>Alcance</th></tr></thead>
+                      <tbody>
+                        <tr><td><input id="t20_atk1_nome"></td><td><input id="t20_atk1_teste"></td><td><input id="t20_atk1_dano"></td><td><input id="t20_atk1_crit"></td><td><input id="t20_atk1_tipo"></td><td><input id="t20_atk1_alc"></td></tr>
+                        <tr><td><input id="t20_atk2_nome"></td><td><input id="t20_atk2_teste"></td><td><input id="t20_atk2_dano"></td><td><input id="t20_atk2_crit"></td><td><input id="t20_atk2_tipo"></td><td><input id="t20_atk2_alc"></td></tr>
+                        <tr><td><input id="t20_atk3_nome"></td><td><input id="t20_atk3_teste"></td><td><input id="t20_atk3_dano"></td><td><input id="t20_atk3_crit"></td><td><input id="t20_atk3_tipo"></td><td><input id="t20_atk3_alc"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="t20-block">
+                  <div class="t20-block-title">Defesa</div>
+                  <div class="t20-defense">
+                    <div class="t20-defense-main"><label>Defesa</label><input type="number" id="t20_defesa" value="10"></div>
+                    <div class="t20-defense-sub">
+                      <div class="t20-pv-item"><span>Mod. DES</span><input type="number" id="t20_def_des" value="0"></div>
+                      <div class="t20-pv-item"><span>Armadura</span><input type="number" id="t20_def_armadura" value="0"></div>
+                      <div class="t20-pv-item"><span>Escudo</span><input type="number" id="t20_def_escudo" value="0"></div>
+                      <div class="t20-pv-item"><span>Outros</span><input type="number" id="t20_def_outros" value="0"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="t20-pv-row">
+                  <div class="t20-field"><span class="t20-field-label">XP</span><input class="t20-field-input" id="t20_xp"></div>
+                  <div class="t20-field"><span class="t20-field-label">Tamanho</span><input class="t20-field-input" id="t20_tamanho"></div>
+                </div>
+              </div>
+
+              <div class="t20-col-mid">
+                <div class="t20-block">
+                  <div class="t20-block-title">Perícias</div>
+                  <div class="table-scroll">
+                    <table class="t20-skills">
+                      <thead><tr><th style="width:30%;">Perícia</th><th style="width:14%;">Total</th><th style="width:12%;">1/2 Nív.</th><th style="width:14%;">Mod. Atr.</th><th style="width:12%;">Treino</th><th>Outros</th></tr></thead>
+                      <tbody id="t20-skills-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="t20-block">
+                  <div class="t20-block-title">Proficiências</div>
+                  <textarea id="t20_proficiencias" rows="4" style="width:100%; border:none; background:transparent; font-family:'EB Garamond',serif; font-size:0.9rem; outline:none; resize:vertical; min-height:80px;"></textarea>
+                </div>
+              </div>
+
+              <div class="t20-col-right">
+                <div class="t20-block">
+                  <div class="t20-block-title">Poderes & Magias</div>
+                  <div class="table-scroll">
+                    <table class="t20-spells-table">
+                      <thead><tr><th style="width:40%;">Nome</th><th style="width:15%;">Custo</th><th style="width:20%;">Execução</th><th>Alcance</th></tr></thead>
+                      <tbody>
+                        <tr><td><input id="t20_pod1_nome"></td><td><input id="t20_pod1_custo"></td><td><input id="t20_pod1_exec"></td><td><input id="t20_pod1_alc"></td></tr>
+                        <tr><td><input id="t20_pod2_nome"></td><td><input id="t20_pod2_custo"></td><td><input id="t20_pod2_exec"></td><td><input id="t20_pod2_alc"></td></tr>
+                        <tr><td><input id="t20_pod3_nome"></td><td><input id="t20_pod3_custo"></td><td><input id="t20_pod3_exec"></td><td><input id="t20_pod3_alc"></td></tr>
+                        <tr><td><input id="t20_pod4_nome"></td><td><input id="t20_pod4_custo"></td><td><input id="t20_pod4_exec"></td><td><input id="t20_pod4_alc"></td></tr>
+                        <tr><td><input id="t20_pod5_nome"></td><td><input id="t20_pod5_custo"></td><td><input id="t20_pod5_exec"></td><td><input id="t20_pod5_alc"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="t20-block">
+                  <div class="t20-block-title">Equipamento</div>
+                  <div class="table-scroll">
+                    <table class="t20-equip-table">
+                      <thead><tr><th style="width:70%;">Item</th><th>Peso</th></tr></thead>
+                      <tbody id="t20-equip-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="t20-block">
+                  <div class="t20-block-title">Anotações</div>
+                  <textarea id="t20_anotacoes" rows="6" style="width:100%; border:none; background:transparent; font-family:'EB Garamond',serif; font-size:0.9rem; outline:none; resize:vertical; min-height:120px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SISTEMA: ORDEM PARANORMAL -->
+    <div id="system-oprpg" class="system-panel" style="display:none;">
+      <section style="padding-top: 1rem;">
+        <div class="container">
+          <div class="text-center mb-3">
+            <button class="btn btn-outline-marrom" onclick="resetSystem('oprpg')"><i class="fas fa-rotate-left me-2"></i>Limpar Ficha de Ordem Paranormal</button>
+          </div>
+
+          <div class="oprpg-sheet">
+            <div class="oprpg-header">
+              <div class="oprpg-title">ORDEM PARANORMAL</div>
+              <div class="oprpg-field"><span class="oprpg-field-label">Personagem</span><input class="oprpg-field-input" id="op_nome" placeholder="Nome do agente"></div>
+              <div class="oprpg-field"><span class="oprpg-field-label">Jogador</span><input class="oprpg-field-input" id="op_jogador" placeholder="Seu nome"></div>
+              <div class="oprpg-field"><span class="oprpg-field-label">Origem</span><input class="oprpg-field-input" id="op_origem" placeholder="Ex.: Militar"></div>
+              <div class="oprpg-field"><span class="oprpg-field-label">Classe</span><input class="oprpg-field-input" id="op_classe" placeholder="Ex.: Combatente"></div>
+            </div>
+
+            <div class="oprpg-grid">
+              <div class="oprpg-col-left">
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Atributos</div>
+                  <div class="oprpg-attrs">
+                    <div class="oprpg-attr"><div class="oprpg-attr-name">AGI</div><div class="oprpg-attr-full">Agilidade</div><input type="number" class="oprpg-attr-value" id="op_agi" value="1" min="0" max="10"></div>
+                    <div class="oprpg-attr"><div class="oprpg-attr-name">FOR</div><div class="oprpg-attr-full">Força</div><input type="number" class="oprpg-attr-value" id="op_for" value="1" min="0" max="10"></div>
+                    <div class="oprpg-attr"><div class="oprpg-attr-name">INT</div><div class="oprpg-attr-full">Intelecto</div><input type="number" class="oprpg-attr-value" id="op_int" value="1" min="0" max="10"></div>
+                    <div class="oprpg-attr"><div class="oprpg-attr-name">PRE</div><div class="oprpg-attr-full">Presença</div><input type="number" class="oprpg-attr-value" id="op_pre" value="1" min="0" max="10"></div>
+                    <div class="oprpg-attr"><div class="oprpg-attr-name">VIG</div><div class="oprpg-attr-full">Vigor</div><input type="number" class="oprpg-attr-value" id="op_vig" value="1" min="0" max="10"></div>
+                  </div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Status</div>
+                  <div class="oprpg-status-grid">
+                    <div class="oprpg-status-box">
+                      <label>Pontos de Vida</label>
+                      <div class="oprpg-status-inputs div-status">
+                        <div> 
+                          <span>Máx</span>
+                          <input type="number" id="op_pv_max" value="20">
+                        </div>
+                        <div> 
+                          <span>Atual</span>
+                          <input type="number" id="op_pv_atual" value="20">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="oprpg-status-box">
+                      <label>Determin.</label>
+                      <div class="oprpg-status-inputs div-status">
+                        <div>
+                          <span>Máx</span>
+                          <input type="number" id="op_pd_max" value="2">
+                        </div>
+
+                        <div>
+                          <span>Atual</span>
+                          <input type="number" id="op_pd_atual" value="2">
+                        </div>                        
+                      </div>
+                    </div>
+                    <div class="oprpg-status-box">
+                      <label>Pontos de Esforço</label>
+                      <div class="oprpg-status-inputs div-status">
+                        <div>
+                          <span>Máx</span>
+                          <input type="number" id="op_pe_max" value="2">
+                        </div>
+                        <div>
+                          <span>Atual</span>
+                          <input type="number" id="op_pe_atual" value="2">
+                        </div>    
+                      </div>
+                    </div>
+                    <div class="oprpg-status-box">
+                      <label>Sanidade</label>
+                      <div class="oprpg-status-inputs div-status">
+                        <div>
+                          <span>Máx</span>
+                          <input type="number" id="op_san_max" value="20">
+                        </div>
+                        <div>
+                          <span>Atual</span>
+                          <input type="number" id="op_san_atual" value="20"></div>
+                        </div>                                              
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Defesa & Deslocamento</div>
+                  <div class="oprpg-field-row">
+                    <div class="oprpg-defense-box">
+                      <label>Defesa</label>
+                      <input type="number" id="op_defesa" value="11" readonly>
+                      <div class="oprpg-defense-formula">= 10 + AGI + Equip + Outros</div>
+                      <div class="oprpg-field-row" style="margin-top:0.4rem;">
+                        <input type="number" id="op_def_equip" value="0" placeholder="Equip" oninput="updateOPRPGDefense()">
+                        <input type="number" id="op_def_outros" value="0" placeholder="Outros" oninput="updateOPRPGDefense()">
+                      </div>
+                    </div>
+                    <div class="oprpg-field" style="text-align:center;">
+                      <span class="oprpg-field-label">Desl.</span>
+                      <input class="oprpg-field-input" id="op_desloc" placeholder="9m" style="text-align:center; font-size:1.1rem;">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Proteção & Resistências</div>
+                  <div class="oprpg-field"><span class="oprpg-field-label">Proteção</span><input class="oprpg-field-input" id="op_protecao" placeholder="Ex.: Colete, ritual..."></div>
+                  <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Resistências</span><input class="oprpg-field-input" id="op_resistencias" placeholder="Ex.: Medo, morte, dano físico..."></div>
+                </div>
+              </div>
+
+              <div class="oprpg-col-mid">
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Perícias</div>
+                  <div class="table-scroll">
+                    <table class="oprpg-skills">
+                      <thead><tr><th style="width:32%;">Perícia</th><th style="width:14%;">Atr.</th><th style="width:14%;">Bônus</th><th style="width:14%;">Treino</th><th>Outros</th></tr></thead>
+                      <tbody id="oprpg-skills-body"></tbody>
+                    </table>
+                  </div>
+                  <p style="font-size:0.7rem; color:var(--texto-suave); margin-top:0.5rem; font-style:italic;">* Penalidade de carga · + Somente treinada</p>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Ataques</div>
+                  <div class="table-scroll">
+                    <table class="oprpg-attack-table">
+                      <thead><tr><th style="width:35%;">Nome</th><th style="width:15%;">Teste</th><th style="width:25%;">Dano</th><th>Crítico / Especial</th></tr></thead>
+                      <tbody>
+                        <tr><td><input id="op_atk1_nome"></td><td><input id="op_atk1_teste"></td><td><input id="op_atk1_dano"></td><td><input id="op_atk1_crit"></td></tr>
+                        <tr><td><input id="op_atk2_nome"></td><td><input id="op_atk2_teste"></td><td><input id="op_atk2_dano"></td><td><input id="op_atk2_crit"></td></tr>
+                        <tr><td><input id="op_atk3_nome"></td><td><input id="op_atk3_teste"></td><td><input id="op_atk3_dano"></td><td><input id="op_atk3_crit"></td></tr>
+                        <tr><td><input id="op_atk4_nome"></td><td><input id="op_atk4_teste"></td><td><input id="op_atk4_dano"></td><td><input id="op_atk4_crit"></td></tr>
+                        <tr><td><input id="op_atk5_nome"></td><td><input id="op_atk5_teste"></td><td><input id="op_atk5_dano"></td><td><input id="op_atk5_crit"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Inventário</div>
+                  <div class="oprpg-inv-header">
+                    <div class="oprpg-field"><span class="oprpg-field-label">Pontos de Prestígio</span><input class="oprpg-field-input" id="op_prestigio" placeholder="0"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Patente</span><input class="oprpg-field-input" id="op_patente_inv" placeholder="Recruta"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Limite de Crédito</span><input class="oprpg-field-input" id="op_credito" placeholder="Baixo"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Carga Máx.</span><input class="oprpg-field-input" id="op_carga" placeholder="Ex.: 10"></div>
+                  </div>
+                  <div class="oprpg-field-row" style="margin-top:0.5rem; gap:0.4rem;">
+                    <div class="oprpg-field"><span class="oprpg-field-label">Limite I</span><input class="oprpg-field-input" id="op_lim1" placeholder="2"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Limite II</span><input class="oprpg-field-input" id="op_lim2" placeholder="2"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Limite III</span><input class="oprpg-field-input" id="op_lim3" placeholder="2"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Limite IV</span><input class="oprpg-field-input" id="op_lim4" placeholder="2"></div>
+                  </div>
+                  <div class="table-scroll" style="margin-top:0.5rem;">
+                    <table class="oprpg-inv-table">
+                      <thead><tr><th style="width:35%;">Item</th><th style="width:20%;">Categoria</th><th style="width:15%;">Espaços</th><th style="width:15%;">Qtd</th><th>Peso</th></tr></thead>
+                      <tbody id="oprpg-inv-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="oprpg-col-right">
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Evolução do Personagem</div>
+                  <div class="oprpg-field-row">
+                    <div class="oprpg-field"><span class="oprpg-field-label">NEX %</span><input class="oprpg-field-input" id="op_nex" placeholder="5"></div>
+                    <div class="oprpg-field"><span class="oprpg-field-label">Nível</span><input class="oprpg-field-input" id="op_nivel" placeholder="1"></div>
+                  </div>
+                  <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Patente</span><input class="oprpg-field-input" id="op_patente" placeholder="Ex.: Recruta"></div>
+                  <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Limite de PE / PD</span><input class="oprpg-field-input" id="op_limite_pe_pd" placeholder="Ex.: 5"></div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Habilidades & Rituais</div>
+                  <div class="oprpg-field" style="margin-bottom:0.4rem;"><span class="oprpg-field-label">DT de Rituais</span><input class="oprpg-field-input" id="op_dt_rituais" placeholder="Ex.: 15"></div>
+                  <div class="table-scroll">
+                    <table class="oprpg-spells-table">
+                      <thead><tr><th style="width:35%;">Nome</th><th style="width:12%;">Custo</th><th style="width:12%;">Página</th><th>Descrição</th></tr></thead>
+                      <tbody>
+                        <tr><td><input id="op_hab1_nome"></td><td><input id="op_hab1_custo"></td><td><input id="op_hab1_pag"></td><td><input id="op_hab1_desc"></td></tr>
+                        <tr><td><input id="op_hab2_nome"></td><td><input id="op_hab2_custo"></td><td><input id="op_hab2_pag"></td><td><input id="op_hab2_desc"></td></tr>
+                        <tr><td><input id="op_hab3_nome"></td><td><input id="op_hab3_custo"></td><td><input id="op_hab3_pag"></td><td><input id="op_hab3_desc"></td></tr>
+                        <tr><td><input id="op_hab4_nome"></td><td><input id="op_hab4_custo"></td><td><input id="op_hab4_pag"></td><td><input id="op_hab4_desc"></td></tr>
+                        <tr><td><input id="op_hab5_nome"></td><td><input id="op_hab5_custo"></td><td><input id="op_hab5_pag"></td><td><input id="op_hab5_desc"></td></tr>
+                        <tr><td><input id="op_hab6_nome"></td><td><input id="op_hab6_custo"></td><td><input id="op_hab6_pag"></td><td><input id="op_hab6_desc"></td></tr>
+                        <tr><td><input id="op_hab7_nome"></td><td><input id="op_hab7_custo"></td><td><input id="op_hab7_pag"></td><td><input id="op_hab7_desc"></td></tr>
+                        <tr><td><input id="op_hab8_nome"></td><td><input id="op_hab8_custo"></td><td><input id="op_hab8_pag"></td><td><input id="op_hab8_desc"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="oprpg-block">
+                  <div class="oprpg-block-title">Anotações</div>
+                  <textarea class="oprpg-textarea" id="op_anotacoes" rows="8" placeholder="História, personalidade, objetivos, contatos..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div><!-- /area-herois -->
+    <!-- ÁREA 2: MESTRE -->
+  <div id="area-mestre" class="area-panel" style="display: none;">
+    <div class="page-header">
+      <span class="section-label">Ferramentas do Mestre</span>
+      <h1>Forja do Mestre</h1>
+      <p style="color:var(--texto-suave); font-style:italic; max-width:640px; margin:0.5rem auto 0; font-size:0.95rem;">
+        Rolagem de dados, rastreador de iniciativa, gerador de NPCs e tabelas de referência.
+      </p>
+    </div>
+
+    <section style="padding-top: 1rem;">
+      <div class="container">
+        <div class="mestre-tabs">
+          <button class="active" data-tab="dados"><i class="fas fa-dice"></i>Rolagem de Dados</button>
+          <button data-tab="iniciativa"><i class="fas fa-swords"></i>Iniciativa</button>
+          <button data-tab="npc"><i class="fas fa-user-shield"></i>Gerador de NPC</button>
+          <button data-tab="tabelas"><i class="fas fa-scroll"></i>Tabelas Rápidas</button>
+        </div>
+
+        <div class="mestre-panel active" data-panel="dados">
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <div class="gm-card">
+                <div class="gm-card-title"><i class="fas fa-dice-d20"></i>Escolha o dado</div>
+                <div class="dice-grid">
+                  <button class="die-btn" onclick="rollDice(4)"><i class="fas fa-dice-d20"></i>d4</button>
+                  <button class="die-btn" onclick="rollDice(6)"><i class="fas fa-dice-d20"></i>d6</button>
+                  <button class="die-btn" onclick="rollDice(8)"><i class="fas fa-dice-d20"></i>d8</button>
+                  <button class="die-btn" onclick="rollDice(10)"><i class="fas fa-dice-d20"></i>d10</button>
+                  <button class="die-btn" onclick="rollDice(12)"><i class="fas fa-dice-d20"></i>d12</button>
+                  <button class="die-btn" onclick="rollDice(20)"><i class="fas fa-dice-d20"></i>d20</button>
+                  <button class="die-btn" onclick="rollDice(100)"><i class="fas fa-percent"></i>d100</button>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-top:0.75rem;">
+                  <div class="monster-field"><label>Qtd</label><input type="number" id="diceQty" value="1" min="1" max="20"></div>
+                  <div class="monster-field"><label>Mod</label><input type="number" id="diceMod" value="0" min="-20" max="20"></div>
+                  <div class="monster-field"><label>Dado</label><input type="number" id="diceSide" value="20" min="2" max="100"></div>
+                </div>
+                <div class="d-flex gap-2 mt-3 flex-wrap">
+                  <button class="btn btn-vermelho flex-fill" onclick="rollCustom()"><i class="fas fa-dice me-2"></i>Rolar</button>
+                  <button class="btn btn-outline-marrom flex-fill" onclick="clearDiceHistory()"><i class="fas fa-trash me-2"></i>Limpar</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="gm-card">
+                <div class="gm-card-title"><i class="fas fa-scroll"></i>Resultado</div>
+                <div class="dice-result">
+                  <span class="result-value" id="diceResultValue">—</span>
+                  <span class="result-label" id="diceResultLabel">Aguardando rolagem</span>
+                </div>
+                <ul class="dice-history" id="diceHistory">
+                  <li style="justify-content:center; opacity:0.6;"><em>Nenhuma rolagem ainda</em></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mestre-panel" data-panel="iniciativa">
+          <div class="gm-card">
+            <div class="gm-card-title"><i class="fas fa-swords"></i>Rastreador de Iniciativa</div>
+            <div class="row g-2 mb-3">
+              <div class="col-md-7"><div class="monster-field"><label>Nome</label><input type="text" id="initName" placeholder="Ex.: Goblin Arqueiro"></div></div>
+              <div class="col-md-3"><div class="monster-field"><label>Iniciativa</label><input type="number" id="initValue" placeholder="Auto"></div></div>
+              <div class="col-md-2 d-flex align-items-end"><button class="btn btn-vermelho w-100" onclick="addInitiative()"><i class="fas fa-plus me-1"></i>Adicionar</button></div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap mb-3">
+              <button class="btn btn-dourado" onclick="rollInitiativeAll()"><i class="fas fa-dice-d20 me-2"></i>Rolar d20</button>
+              <button class="btn btn-outline-marrom" onclick="nextTurn()"><i class="fas fa-forward me-2"></i>Próximo</button>
+              <button class="btn btn-outline-marrom" onclick="clearInitiative()"><i class="fas fa-trash me-2"></i>Limpar</button>
+            </div>
+            <ul class="init-list" id="initiativeList">
+              <li style="text-align:center; padding:1rem; color:var(--texto-suave); font-style:italic;">Nenhum combatente ainda</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mestre-panel" data-panel="npc">
+          <div class="gm-card">
+            <div class="gm-card-title"><i class="fas fa-user-shield"></i>Gerador Rápido de NPC</div>
+            <div class="row g-2 mb-3">
+              <div class="col-md-3"><div class="monster-field"><label>Raça</label>
+                <select id="npcRaca"><option>Aleatório</option><option>Humano</option><option>Elfo</option><option>Anão</option><option>Halfling</option><option>Meio-Elfo</option><option>Meio-Orc</option><option>Tiefling</option><option>Draconato</option><option>Gnomo</option></select>
+              </div></div>
+              <div class="col-md-3"><div class="monster-field"><label>Ocupação</label>
+                <select id="npcOcupacao"><option>Aleatório</option><option>Tavernheiro</option><option>Ferreiro</option><option>Mercador</option><option>Guarda</option><option>Nobre</option><option>Camponês</option><option>Sacerdote</option><option>Ladrão</option><option>Mago</option><option>Bardo</option></select>
+              </div></div>
+              <div class="col-md-3"><div class="monster-field"><label>Tom</label>
+                <select id="npcTom"><option>Aleatório</option><option>Amigável</option><option>Neutro</option><option>Desconfiado</option><option>Hostil</option><option>Excêntrico</option></select>
+              </div></div>
+              <div class="col-md-3 d-flex align-items-end"><button class="btn btn-vermelho w-100" onclick="generateNPC()"><i class="fas fa-wand-magic-sparkles me-1"></i>Gerar</button></div>
+            </div>
+            <div id="npcResult" style="display:none;">
+              <div style="background:#fffdf5; border:1.5px solid var(--marrom); border-radius:4px; padding:1.25rem;">
+                <h3 style="margin-bottom:0.5rem; color:var(--vermelho);" id="npcNome">—</h3>
+                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Raça:</strong> <span id="npcRacaResult">—</span></p>
+                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Ocupação:</strong> <span id="npcOcupacaoResult">—</span></p>
+                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Tom:</strong> <span id="npcTomResult">—</span></p>
+                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Aparência:</strong> <span id="npcAparencia">—</span></p>
+                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Traço:</strong> <span id="npcTraco">—</span></p>
+                <p style="margin:0; font-size:0.9rem;"><strong style="color:var(--marrom);">Gancho:</strong> <span id="npcGancho">—</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mestre-panel" data-panel="tabelas">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="gm-card">
+                <div class="gm-card-title"><i class="fas fa-coins"></i>Tesouro Aleatório (d100)</div>
+                <table class="ref-table">
+                  <thead><tr><th>d100</th><th>Resultado</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>01-15</strong></td><td>Nada além de poeira</td></tr>
+                    <tr><td><strong>16-30</strong></td><td>2d6 moedas de cobre</td></tr>
+                    <tr><td><strong>31-45</strong></td><td>3d6 moedas de prata</td></tr>
+                    <tr><td><strong>46-60</strong></td><td>2d10 moedas de ouro</td></tr>
+                    <tr><td><strong>61-70</strong></td><td>1d4 gemas de 10 PO</td></tr>
+                    <tr><td><strong>71-80</strong></td><td>Poção de Cura</td></tr>
+                    <tr><td><strong>81-88</strong></td><td>Item mágico incomum</td></tr>
+                    <tr><td><strong>89-95</strong></td><td>Arma +1</td></tr>
+                    <tr><td><strong>96-99</strong></td><td>Item mágico raro</td></tr>
+                    <tr><td><strong>100</strong></td><td>Item lendário + 500 PO</td></tr>
+                  </tbody>
+                </table>
+                <button class="btn btn-dourado w-100 mt-3" onclick="rollTreasure()"><i class="fas fa-dice me-2"></i>Rolar Tesouro</button>
+                <div id="treasureResult" style="display:none; margin-top:1rem; padding:1rem; background:var(--preto); color:var(--dourado-2); border:2px solid var(--dourado); border-radius:4px; text-align:center; font-family:'Cinzel',serif;">
+                  <small style="display:block; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.3rem; color:var(--pergaminho-2);">Resultado</small>
+                  <strong id="treasureText" style="font-size:1.1rem;"></strong>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="gm-card">
+                <div class="gm-card-title"><i class="fas fa-dungeon"></i>Encontros por Ambiente</div>
+                <table class="ref-table">
+                  <thead><tr><th>Ambiente</th><th>Exemplos</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Floresta</strong></td><td>Lobos, goblins, aranhas gigantes</td></tr>
+                    <tr><td><strong>Caverna</strong></td><td>Kobolds, morcegos, slime, troll</td></tr>
+                    <tr><td><strong>Ruínas</strong></td><td>Esqueletos, zumbis, gárgulas, fantasma</td></tr>
+                    <tr><td><strong>Cidade</strong></td><td>Ladrões, cultistas, guardas corrompidos</td></tr>
+                    <tr><td><strong>Pântano</strong></td><td>Will-o'-wisp, bruxa, crocodilos</td></tr>
+                    <tr><td><strong>Montanha</strong></td><td>Yeti, harpias, griffon, gigante</td></tr>
+                    <tr><td><strong>Deserto</strong></td><td>Múmias, escorpiões gigantes, djinn</td></tr>
+                    <tr><td><strong>Subterrâneo</strong></td><td>Drows, mind flayers, beholder</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="gm-card">
+                <div class="gm-card-title"><i class="fas fa-heart-pulse"></i>Dificuldade de Encontro (D&D 5e)</div>
+                <table class="ref-table">
+                  <thead><tr><th>Nível</th><th>Fácil</th><th>Médio</th><th>Difícil</th></tr></thead>
+                  <tbody>
+                    <tr><td>1º</td><td>25</td><td>50</td><td>75</td></tr>
+                    <tr><td>2º</td><td>50</td><td>100</td><td>150</td></tr>
+                    <tr><td>3º</td><td>75</td><td>150</td><td>225</td></tr>
+                    <tr><td>4º</td><td>125</td><td>250</td><td>375</td></tr>
+                    <tr><td>5º</td><td>250</td><td>500</td><td>750</td></tr>
+                    <tr><td>6º</td><td>300</td><td>600</td><td>900</td></tr>
+                    <tr><td>7º</td><td>350</td><td>750</td><td>1100</td></tr>
+                    <tr><td>8º</td><td>450</td><td>900</td><td>1400</td></tr>
+                    <tr><td>9º</td><td>550</td><td>1100</td><td>1600</td></tr>
+                    <tr><td>10º</td><td>600</td><td>1200</td><td>1900</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ÁREA 3: MONSTROS -->
+  <div id="area-monstros" class="area-panel" style="display: none;">
+    <div class="page-header">
+      <span class="section-label">Bestiário</span>
+      <h1>Forja dos Monstros</h1>
+      <p style="color:var(--texto-suave); font-style:italic; max-width:640px; margin:0.5rem auto 0; font-size:0.95rem;">
+        Crie criaturas em fichas separadas com acordeão — expanda só o que importa.
+      </p>
+    </div>
+
+    <section style="padding-top: 1rem;">
+      <div class="container">
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-vermelho" onclick="createMonster()"><i class="fas fa-plus me-2"></i>Novo Monstro</button>
+            <button class="btn btn-outline-marrom" onclick="expandAllMonsters()"><i class="fas fa-angles-down me-2"></i>Expandir</button>
+            <button class="btn btn-outline-marrom" onclick="collapseAllMonsters()"><i class="fas fa-angles-up me-2"></i>Minimizar</button>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-dourado" onclick="exportAllMonsters()"><i class="fas fa-file-export me-2"></i>Exportar Todos</button>
+            <button class="btn btn-outline-marrom" onclick="document.getElementById('importAllMonstersFile').click()"><i class="fas fa-file-import me-2"></i>Importar</button>
+            <input type="file" id="importAllMonstersFile" accept=".json" style="display:none" onchange="importAllMonsters(this)">
+          </div>
+        </div>
+        <p id="monsterSaveIndicator" class="save-indicator">Nenhum monstro criado ainda</p>
+        <div id="monstersContainer" class="monsters-container"></div>
+
+        <div class="gm-card" style="margin-top: 2rem;">
+          <div class="gm-card-title"><i class="fas fa-skull-crossbones"></i>Referência Rápida — VD</div>
+          <table class="ref-table">
+            <thead><tr><th>VD</th><th>XP</th><th>Prof.</th><th>CA</th><th>PV</th><th>Dano/Turno</th></tr></thead>
+            <tbody>
+              <tr><td><strong>0</strong></td><td>10</td><td>+2</td><td>13</td><td>1-6</td><td>0-1</td></tr>
+              <tr><td><strong>1/8</strong></td><td>25</td><td>+2</td><td>13</td><td>7-35</td><td>2-3</td></tr>
+              <tr><td><strong>1/4</strong></td><td>50</td><td>+2</td><td>13</td><td>36-49</td><td>4-5</td></tr>
+              <tr><td><strong>1/2</strong></td><td>100</td><td>+2</td><td>13</td><td>50-70</td><td>6-8</td></tr>
+              <tr><td><strong>1</strong></td><td>200</td><td>+2</td><td>14</td><td>71-85</td><td>9-14</td></tr>
+              <tr><td><strong>2</strong></td><td>450</td><td>+2</td><td>14</td><td>86-100</td><td>15-20</td></tr>
+              <tr><td><strong>3</strong></td><td>700</td><td>+2</td><td>15</td><td>101-115</td><td>21-26</td></tr>
+              <tr><td><strong>4</strong></td><td>1100</td><td>+2</td><td>15</td><td>116-130</td><td>27-32</td></tr>
+              <tr><td><strong>5</strong></td><td>1800</td><td>+3</td><td>15</td><td>131-145</td><td>33-38</td></tr>
+              <tr><td><strong>10</strong></td><td>5900</td><td>+4</td><td>17</td><td>206-220</td><td>63-68</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-save" id="toastSave"><i class="fas fa-check-circle me-2"></i>Salvo com sucesso!</div>
+  <button id="backToTop" class="back-to-top" aria-label="Voltar ao topo"><i class="fas fa-arrow-up"></i></button>
+
+  <footer>
+    <div class="container text-center">
+      <h5>Forja de RPG</h5>
+      <p>Fichas de Herói (D&D 5e, Tormenta 20, Ordem Paranormal), Ferramentas do Mestre e Bestiário.</p>
+      <p style="margin:0; padding-top:1.25rem; border-top:1px solid rgba(184,137,43,0.25); font-size:0.82rem; font-style:italic; color:rgba(237,224,196,0.55);">
+        D&D é marca da Wizards of the Coast. Tormenta 20 é marca da Jambô. Ordem Paranormal é marca da Jambô. Projeto de fãs sem fins comerciais.
+      </p>
+    </div>
+  </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* NAVEGAÇÃO */
+    let currentSystem = 'dnd5e';
+    let currentArea = 'herois';
+
+    function showArea(area) {
+      currentArea = area;
+      document.querySelectorAll('.area-panel').forEach(p => p.style.display = 'none');
+      const target = document.getElementById('area-' + area);
+      if (target) target.style.display = 'block';
+      document.querySelectorAll('.navbar .nav-link[data-area]').forEach(l => l.classList.toggle('active', l.dataset.area === area));
+      const nc = document.getElementById('navMenu');
+      if (nc.classList.contains('show')) new bootstrap.Collapse(nc).hide();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem('forja_area_ativa', area); } catch(e) {}
+    }
+
+    function showSystem(system) {
+      currentSystem = system;
+      document.querySelectorAll('.system-panel').forEach(p => p.style.display = 'none');
+      const panel = document.getElementById('system-' + system);
+      if (panel) panel.style.display = 'block';
+      document.querySelectorAll('.system-selector button').forEach(btn => {
+        const a = btn.dataset.system === system;
+        btn.classList.toggle('active', a);
+        btn.setAttribute('aria-selected', a ? 'true' : 'false');
+      });
+      const t = document.getElementById('pageTitle'), s = document.getElementById('pageSubtitle');
+      if (system === 't20') {
+        t.textContent = 'Forje seu Herói — Tormenta 20';
+        s.textContent = 'Ficha oficial de Tormenta 20 — preencha, salve e leve para Arton.';
+      } else if (system === 'oprpg') {
+        t.textContent = 'Forje seu Herói — Ordem Paranormal';
+        s.textContent = 'Ficha de agente da Ordem — enfrente o Outro Lado com estilo.';
+      } else {
+        t.textContent = 'Forje seu Herói — D&D 5e';
+        s.textContent = 'Ficha oficial de D&D 5e — preencha, salve e leve para a mesa.';
+      }
+      try { localStorage.setItem('forja_rpg_system', system); } catch(e) {}
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (system === 't20') updateT20Mods();
+      if (system === 'oprpg') { recalcAllOPRPGSkills(); updateOPRPGDefense(); }
+      updateSaveIndicator();
+    }
+    document.querySelectorAll('.system-selector button').forEach(btn => btn.addEventListener('click', () => showSystem(btn.dataset.system)));
+
+    /* ABAS MESTRE */
+    document.querySelectorAll('.mestre-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mestre-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('.mestre-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === btn.dataset.tab));
+      });
+    });
+
+    /* ============================================================
+       D&D 5e — MODIFICADORES
+    ============================================================ */
+    function calcModDnD(v) { const n = parseInt(v) || 10; const m = Math.floor((n - 10) / 2); return (m >= 0 ? '+' : '') + m; }
+    const attrIds = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
+    const attrMap = { 'força':'forca', 'destreza':'destreza', 'constituição':'constituicao', 'inteligência':'inteligencia', 'sabedoria':'sabedoria', 'carisma':'carisma' };
+
+    function updateAllMods() {
+      attrIds.forEach(id => {
+        const i = document.getElementById(id), m = document.getElementById(id + 'Mod');
+        if (i && m) m.value = calcModDnD(i.value);
+      });
+      document.querySelectorAll('#system-dnd5e .check-item').forEach(item => {
+        const n = item.querySelector('.name'); if (!n) return;
+        const k = n.textContent.toLowerCase().trim();
+        const a = attrMap[k];
+        if (a) { const el = document.getElementById(a); if (el) item.querySelector('.mod').value = calcModDnD(el.value); }
+      });
+    }
+
+    /* ============================================================
+       TORMENTA 20
+    ============================================================ */
+    const t20AttrIds = ['t20_for', 't20_des', 't20_con', 't20_int', 't20_sab', 't20_car'];
+    function updateT20Mods() {
+      t20AttrIds.forEach(id => {
+        const i = document.getElementById(id), m = document.getElementById(id + '_mod');
+        if (!i || !m) return;
+        const v = parseInt(i.value) || 0;
+        const mod = Math.floor((v - 10) / 2);
+        m.textContent = (mod >= 0 ? '+' : '') + mod;
+      });
+    }
+
+    const t20Skills = [
+      { key:'acrobacia', name:'Acrobacia*', attr:'des' }, { key:'adestramento', name:'Adestramento*', attr:'car' },
+      { key:'atletismo', name:'Atletismo', attr:'for' }, { key:'atuacao', name:'Atuação', attr:'car' },
+      { key:'cavalgar', name:'Cavalgar', attr:'des' }, { key:'conhecimento', name:'Conhecimento*', attr:'int' },
+      { key:'cura', name:'Cura', attr:'sab' }, { key:'diplomacia', name:'Diplomacia', attr:'car' },
+      { key:'enganacao', name:'Enganação', attr:'car' }, { key:'fortitude', name:'Fortitude', attr:'con' },
+      { key:'furtividade', name:'Furtividade*', attr:'des' }, { key:'guerra', name:'Guerra*', attr:'int' },
+      { key:'iniciativa', name:'Iniciativa', attr:'des' }, { key:'intimidacao', name:'Intimidação', attr:'car' },
+      { key:'intuicao', name:'Intuição', attr:'sab' }, { key:'investigacao', name:'Investigação', attr:'int' },
+      { key:'jogatina', name:'Jogatina*', attr:'car' }, { key:'ladinagem', name:'Ladinagem*', attr:'des' },
+      { key:'luta', name:'Luta', attr:'for' }, { key:'misticismo', name:'Misticismo*', attr:'int' },
+      { key:'nobreza', name:'Nobreza*', attr:'int' }, { key:'percepcao', name:'Percepção', attr:'sab' },
+      { key:'pilotagem', name:'Pilotagem*', attr:'des' }, { key:'pontaria', name:'Pontaria', attr:'des' },
+      { key:'reflexos', name:'Reflexos', attr:'des' }, { key:'religiao', name:'Religião*', attr:'sab' },
+      { key:'sobrevivencia', name:'Sobrevivência', attr:'sab' }, { key:'vontade', name:'Vontade', attr:'sab' }
+    ];
+
+    function buildT20SkillsTable() {
+      const tb = document.getElementById('t20-skills-body');
+      if (!tb || tb.children.length > 0) return;
+      tb.innerHTML = t20Skills.map(sk => `
+        <tr>
+          <td class="skill-name">${sk.name}</td>
+          <td><input type="number" id="t20_sk_${sk.key}_total" data-skill="${sk.key}"></td>
+          <td><input type="number" id="t20_sk_${sk.key}_niv" data-skill="${sk.key}"></td>
+          <td><input type="number" id="t20_sk_${sk.key}_atr" data-skill="${sk.key}"></td>
+          <td><input type="checkbox" id="t20_sk_${sk.key}_trn" data-skill="${sk.key}"></td>
+          <td><input type="number" id="t20_sk_${sk.key}_out" data-skill="${sk.key}"></td>
+        </tr>`).join('');
+      tb.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => { recalcT20Skill(inp.dataset.skill); markDirty(); });
+        inp.addEventListener('change', () => { recalcT20Skill(inp.dataset.skill); markDirty(); });
+      });
+    }
+    function recalcT20Skill(k) {
+      if (!k) return;
+      const t = document.getElementById(`t20_sk_${k}_total`); if (!t) return;
+      const n = parseInt(document.getElementById(`t20_sk_${k}_niv`)?.value) || 0;
+      const a = parseInt(document.getElementById(`t20_sk_${k}_atr`)?.value) || 0;
+      const tr = document.getElementById(`t20_sk_${k}_trn`)?.checked ? 5 : 0;
+      const o = parseInt(document.getElementById(`t20_sk_${k}_out`)?.value) || 0;
+      t.value = Math.floor(n / 2) + a + tr + o;
+    }
+    function buildT20EquipmentTable() {
+      const tb = document.getElementById('t20-equip-body');
+      if (!tb || tb.children.length > 0) return;
+      let h = '';
+      for (let i = 1; i <= 10; i++) h += `<tr><td><input id="t20_eq${i}_nome"></td><td><input id="t20_eq${i}_peso"></td></tr>`;
+      tb.innerHTML = h;
+    }
+
+    /* ============================================================
+       ORDEM PARANORMAL RPG
+    ============================================================ */
+    const oprpgSkills = [
+      { key:'acrobacia',      name:'Acrobacia',       attr:'AGI', treino:false },
+      { key:'adestramento',   name:'Adestramento*',   attr:'PRE', treino:true  },
+      { key:'artes',          name:'Artes',           attr:'PRE', treino:false },
+      { key:'atletismo',      name:'Atletismo',       attr:'FOR', treino:false },
+      { key:'atualidades',    name:'Atualidades',     attr:'INT', treino:false },
+      { key:'ciencias',       name:'Ciências*',       attr:'INT', treino:true  },
+      { key:'crime',          name:'Crime*',          attr:'AGI', treino:true  },
+      { key:'diplomacia',     name:'Diplomacia',      attr:'PRE', treino:false },
+      { key:'enganacao',      name:'Enganação',       attr:'PRE', treino:false },
+      { key:'fortitude',      name:'Fortitude',       attr:'VIG', treino:false },
+      { key:'furtividade',    name:'Furtividade+',    attr:'AGI', treino:true  },
+      { key:'iniciativa',     name:'Iniciativa',      attr:'AGI', treino:false },
+      { key:'intimidacao',    name:'Intimidação',     attr:'PRE', treino:false },
+      { key:'intuicao',       name:'Intuição',        attr:'PRE', treino:false },
+      { key:'investigacao',   name:'Investigação',    attr:'INT', treino:false },
+      { key:'luta',           name:'Luta',            attr:'FOR', treino:false },
+      { key:'medicina',       name:'Medicina',        attr:'INT', treino:false },
+      { key:'ocultismo',      name:'Ocultismo*',      attr:'INT', treino:true  },
+      { key:'percepcao',      name:'Percepção',       attr:'PRE', treino:false },
+      { key:'pilotagem',      name:'Pilotagem*',      attr:'AGI', treino:true  },
+      { key:'pontaria',       name:'Pontaria',        attr:'AGI', treino:false },
+      { key:'profissao',      name:'Profissão*',      attr:'INT', treino:true  },
+      { key:'reflexos',       name:'Reflexos',        attr:'AGI', treino:false },
+      { key:'religiao',       name:'Religião*',       attr:'PRE', treino:true  },
+      { key:'sobrevivencia',  name:'Sobrevivência',   attr:'INT', treino:false },
+      { key:'tatica',         name:'Tática*',         attr:'INT', treino:true  },
+      { key:'tecnologia',     name:'Tecnologia*',     attr:'INT', treino:true  },
+      { key:'vontade',        name:'Vontade',         attr:'PRE', treino:false }
+    ];
+    const oprpgAttrMap = { 'AGI': 'op_agi', 'FOR': 'op_for', 'INT': 'op_int', 'PRE': 'op_pre', 'VIG': 'op_vig' };
+
+    function buildOPRPGSkillsTable() {
+      const tb = document.getElementById('oprpg-skills-body');
+      if (!tb || tb.children.length > 0) return;
+      /* No quarto td tinha essa linha de coddigo antes do fechamento da tag ${sk.treino ? '' : 'disabled'}*/
+      tb.innerHTML = oprpgSkills.map(sk => `
+        <tr>
+          <td class="skill-name">${sk.name}</td>
+          <td class="skill-attr">${sk.attr}</td>
+          <td><input type="number" id="op_sk_${sk.key}_bonus" data-skill="${sk.key}" value="0"></td>
+          <td><input type="checkbox" id="op_sk_${sk.key}_treino" data-skill="${sk.key}" ></td>
+          <td><input type="number" id="op_sk_${sk.key}_outros" data-skill="${sk.key}" value="0"></td>
+        </tr>`).join('');
+      tb.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('input', () => { recalcOPRPGSkill(inp.dataset.skill); markDirty(); });
+        inp.addEventListener('change', () => { recalcOPRPGSkill(inp.dataset.skill); markDirty(); });
+      });
+    }
+    function recalcOPRPGSkill(key) {
+      if (!key) return;
+      const skill = oprpgSkills.find(s => s.key === key); if (!skill) return;
+      const bonusEl = document.getElementById(`op_sk_${key}_bonus`);
+      const treinoEl = document.getElementById(`op_sk_${key}_treino`);
+      const outrosEl = document.getElementById(`op_sk_${key}_outros`);
+      if (!bonusEl) return;
+      const attrInput = document.getElementById(oprpgAttrMap[skill.attr]);
+      const attrVal = parseInt(attrInput?.value) || 0;
+      const treino = treinoEl?.checked ? 5 : 0;
+      const outros = parseInt(outrosEl?.value) || 0;
+      bonusEl.value = attrVal + treino + outros;
+    }
+    function recalcAllOPRPGSkills() {
+      oprpgSkills.forEach(sk => recalcOPRPGSkill(sk.key));
+    }
+    function updateOPRPGDefense() {
+      const agi = parseInt(document.getElementById('op_agi')?.value) || 0;
+      const equip = parseInt(document.getElementById('op_def_equip')?.value) || 0;
+      const outros = parseInt(document.getElementById('op_def_outros')?.value) || 0;
+      const el = document.getElementById('op_defesa');
+      if (el) el.value = 10 + agi + equip + outros;
+    }
+    function buildOPRPGInventory() {
+      const tb = document.getElementById('oprpg-inv-body');
+      if (!tb || tb.children.length > 0) return;
+      let html = '';
+      for (let i = 1; i <= 10; i++) {
+        html += `<tr>
+          <td><input id="op_inv${i}_item"></td>
+          <td><input id="op_inv${i}_cat"></td>
+          <td><input id="op_inv${i}_esp"></td>
+          <td><input id="op_inv${i}_qtd"></td>
+          <td><input id="op_inv${i}_peso"></td>
+        </tr>`;
+      }
+      tb.innerHTML = html;
+    }
+
+    /* ============================================================
+       CACHE / SALVAR / CARREGAR
+    ============================================================ */
+    const STORAGE_KEY = 'forja_rpg_sheets_v1';
+    const STORAGE_SYSTEM = 'forja_rpg_system';
+    let autosaveTimer = null, dirty = false, lastSaved = null;
+
+    function collectFormData() {
+      const d = {};
+      document.querySelectorAll('#area-herois input[id], #area-herois textarea[id]').forEach(el => {
+        if (el.type === 'checkbox') d[el.id] = el.checked;
+        else d[el.id] = el.value;
+      });
+      d.__meta = { savedAt: new Date().toISOString() };
+      return d;
+    }
+    function applyFormData(d) {
+      if (!d) return;
+      Object.keys(d).forEach(k => {
+        if (k === '__meta') return;
+        const el = document.getElementById(k); if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!d[k];
+        else el.value = d[k];
+      });
+    }
+    function saveSheet(silent) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectFormData()));
+        dirty = false; lastSaved = new Date(); updateSaveIndicator();
+        if (!silent) showToast('Ficha salva!', 'success');
+      } catch(e) { if (!silent) showToast('Erro ao salvar.', 'error'); }
+    }
+    function loadSheet() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return;
+        const d = JSON.parse(raw);
+        applyFormData(d);
+        if (d.__meta?.savedAt) lastSaved = new Date(d.__meta.savedAt);
+        updateAllMods(); updateT20Mods();
+        recalcAllOPRPGSkills(); updateOPRPGDefense();
+        updateSaveIndicator();
+      } catch(e) {}
+    }
+    function clearSystemCache(sys) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return;
+        const d = JSON.parse(raw), nd = {};
+        Object.keys(d).forEach(k => {
+          if (k === '__meta') return;
+          const isT20 = k.startsWith('t20_');
+          const isOP  = k.startsWith('op_');
+          if (sys === 't20') { if (!isT20) nd[k] = d[k]; }
+          else if (sys === 'oprpg') { if (!isOP) nd[k] = d[k]; }
+          else { if (isT20 || isOP) nd[k] = d[k]; }
+        });
+        nd.__meta = { savedAt: new Date().toISOString() };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nd));
+      } catch(e) {}
+    }
+    function markDirty() {
+      dirty = true; updateSaveIndicator();
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => saveSheet(true), 800);
+    }
+    function updateSaveIndicator() {
+      const el = document.getElementById('saveIndicator'); if (!el) return;
+      if (!lastSaved) { el.textContent = dirty ? 'Alterações não salvas' : 'Nenhum salvamento ainda'; el.classList.toggle('dirty', dirty); return; }
+      const w = lastSaved.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      el.textContent = dirty ? 'Salvando...' : `Salvo às ${w}`;
+      el.classList.toggle('dirty', dirty);
+    }
+    function showToast(msg, type) {
+      const t = document.getElementById('toastSave'); if (!t) return;
+      const c = { success:['#8b1e1e','#a83328'], info:['#5c3a1e','#3d2415'], error:['#7a1010','#a83328'] };
+      const [c1,c2] = c[type] || c.success;
+      t.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+      const ic = { success:'fa-check-circle', info:'fa-circle-info', error:'fa-triangle-exclamation' }[type] || 'fa-check-circle';
+      t.innerHTML = `<i class="fas ${ic} me-2"></i>${msg}`;
+      t.classList.add('show');
+      clearTimeout(t._hideTimer);
+      t._hideTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    /* FUNÇÕES HERÓIS */
+    function saveAll() { saveSheet(false); }
+    function resetAll() {
+      const sys = currentSystem;
+      const n = sys === 't20' ? 'Tormenta 20' : sys === 'oprpg' ? 'Ordem Paranormal' : 'D&D 5e';
+      if (!confirm(`Limpar APENAS a ficha de ${n}?`)) return;
+      resetSystemFields(sys);
+    }
+    function resetSystem(sys) {
+      const n = sys === 't20' ? 'Tormenta 20' : sys === 'oprpg' ? 'Ordem Paranormal' : 'D&D 5e';
+      if (!confirm(`Limpar a ficha de ${n}?`)) return;
+      resetSystemFields(sys);
+    }
+    function resetSystemFields(sys) {
+      const p = document.getElementById('system-' + sys); if (!p) return;
+      p.querySelectorAll('input, textarea').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else if (el.type === 'number') {
+          if (attrIds.includes(el.id) || t20AttrIds.includes(el.id)) el.value = 10;
+          else if (el.id.startsWith('op_') && ['op_agi','op_for','op_int','op_pre','op_vig'].includes(el.id)) el.value = 1;
+          else if (el.id === 'profBonus') el.value = 2;
+          else if (el.id === 'ca' || el.id === 't20_defesa') el.value = 10;
+          else if (el.id === 'op_defesa') el.value = 11;
+          else if (el.id === 'deslocamento') el.value = 9;
+          else if (el.id === 'pvTotal' || el.id === 'pvAtual' || el.id === 'op_pv_max' || el.id === 'op_pv_atual' || el.id === 'op_san_max' || el.id === 'op_san_atual') el.value = 20;
+          else if (el.id === 't20_pv_max' || el.id === 't20_pv_atual') el.value = 20;
+          else if (el.id === 't20_pm_max' || el.id === 't20_pm_atual') el.value = 10;
+          else el.value = 0;
+        } else el.value = '';
+      });
+      if (sys === 't20') updateT20Mods();
+      else if (sys === 'oprpg') { recalcAllOPRPGSkills(); updateOPRPGDefense(); }
+      else updateAllMods();
+      clearSystemCache(sys); saveSheet(true);
+      const n = sys === 't20' ? 'Tormenta 20' : sys === 'oprpg' ? 'Ordem Paranormal' : 'D&D 5e';
+      showToast(`Ficha de ${n} limpa.`, 'info');
+    }
+    function clearAllSystems() {
+      if (!confirm('Apagar TODAS as fichas?')) return;
+      document.querySelectorAll('#area-herois .system-panel input, #area-herois .system-panel textarea').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else if (el.type === 'number') el.value = 0;
+        else el.value = '';
+      });
+      attrIds.forEach(id => { const e = document.getElementById(id); if (e) e.value = 10; });
+      t20AttrIds.forEach(id => { const e = document.getElementById(id); if (e) e.value = 10; });
+      ['op_agi','op_for','op_int','op_pre','op_vig'].forEach(id => { const e = document.getElementById(id); if (e) e.value = 1; });
+      updateAllMods(); updateT20Mods(); recalcAllOPRPGSkills(); updateOPRPGDefense();
+      localStorage.removeItem(STORAGE_KEY);
+      lastSaved = null; dirty = false; updateSaveIndicator();
+      showToast('Todas as fichas foram limpas.', 'info');
+    }
+    function exportSheet() {
+      const blob = new Blob([JSON.stringify(collectFormData(), null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `ficha_${Date.now()}.json`;
+      a.click();
+      showToast('Ficha exportada!', 'success');
+    }
+    function importSheet(inp) {
+      const f = inp.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = e => {
+        try {
+          applyFormData(JSON.parse(e.target.result));
+          updateAllMods(); updateT20Mods(); recalcAllOPRPGSkills(); updateOPRPGDefense(); markDirty();
+          showToast('Ficha importada!', 'success');
+        } catch(e) { showToast('Arquivo inválido.', 'error'); }
+        inp.value = '';
+      };
+      r.readAsText(f);
+    }
+
+    /* DADOS */
+    const diceHistory = [];
+    function rollDice(s) { const q = parseInt(document.getElementById('diceQty')?.value) || 1; const m = parseInt(document.getElementById('diceMod')?.value) || 0; doRoll(q, s, m); }
+    function rollCustom() { const q = parseInt(document.getElementById('diceQty')?.value) || 1; const s = parseInt(document.getElementById('diceSide')?.value) || 20; const m = parseInt(document.getElementById('diceMod')?.value) || 0; doRoll(q, s, m); }
+    function doRoll(q, s, m) {
+      q = Math.max(1, Math.min(20, q)); s = Math.max(2, Math.min(100, s));
+      const rolls = []; let total = 0;
+      for (let i = 0; i < q; i++) { const r = Math.floor(Math.random() * s) + 1; rolls.push(r); total += r; }
+      total += m;
+      document.getElementById('diceResultValue').textContent = total;
+      let lbl = `${q}d${s}`; if (m !== 0) lbl += (m > 0 ? ' + ' : ' - ') + Math.abs(m);
+      lbl += ` [${rolls.join(', ')}]`;
+      document.getElementById('diceResultLabel').textContent = lbl;
+      diceHistory.unshift({ total, label: lbl });
+      if (diceHistory.length > 20) diceHistory.pop();
+      renderDiceHistory();
+    }
+    function renderDiceHistory() {
+      const l = document.getElementById('diceHistory'); if (!l) return;
+      if (diceHistory.length === 0) { l.innerHTML = '<li style="justify-content:center; opacity:0.6;"><em>Nenhuma rolagem ainda</em></li>'; return; }
+      l.innerHTML = diceHistory.map(h => `<li><span>${h.label}</span><strong>${h.total}</strong></li>`).join('');
+    }
+    function clearDiceHistory() { diceHistory.length = 0; renderDiceHistory(); document.getElementById('diceResultValue').textContent = '—'; document.getElementById('diceResultLabel').textContent = 'Aguardando rolagem'; }
+
+    /* INICIATIVA */
+    let initList = [], currentTurn = 0;
+    function addInitiative() {
+      const n = document.getElementById('initName').value.trim(); if (!n) { showToast('Digite um nome.', 'error'); return; }
+      let v = parseInt(document.getElementById('initValue').value) || (Math.floor(Math.random() * 20) + 1);
+      initList.push({ name: n, value: v, id: Date.now() + Math.random() });
+      initList.sort((a, b) => b.value - a.value);
+      document.getElementById('initName').value = ''; document.getElementById('initValue').value = '';
+      renderInitiative();
+    }
+    function rollInitiativeAll() {
+      initList.forEach(i => i.value = Math.floor(Math.random() * 20) + 1);
+      initList.sort((a, b) => b.value - a.value);
+      renderInitiative(); showToast('Iniciativa rolada!', 'success');
+    }
+    function renderInitiative() {
+      const l = document.getElementById('initiativeList'); if (!l) return;
+      if (initList.length === 0) { l.innerHTML = '<li style="text-align:center; padding:1rem; color:var(--texto-suave); font-style:italic;">Nenhum combatente ainda</li>'; return; }
+      l.innerHTML = initList.map((i, idx) => `
+        <li class="init-item ${idx === currentTurn ? 'current' : ''}">
+          <span class="init-pos">${idx + 1}º</span>
+          <span class="init-name">${escapeHtml(i.name)}</span>
+          <span class="init-value">${i.value}</span>
+          <button class="init-remove" onclick="removeInitiative(${i.id})"><i class="fas fa-times"></i></button>
+        </li>`).join('');
+    }
+    function removeInitiative(id) { initList = initList.filter(i => i.id !== id); if (currentTurn >= initList.length) currentTurn = 0; renderInitiative(); }
+    function nextTurn() { if (initList.length === 0) return; currentTurn = (currentTurn + 1) % initList.length; renderInitiative(); showToast(`Turno de ${initList[currentTurn].name}`, 'info'); }
+    function clearInitiative() { if (!confirm('Limpar ordem?')) return; initList = []; currentTurn = 0; renderInitiative(); }
+
+    /* NPC */
+    const npcData = {
+      nomes: ['Aldric','Mira','Thorn','Selene','Borin','Vera','Kael','Lyra','Dorin','Anya','Fenrir','Íris','Cassius','Naomi','Orin','Talia'],
+      racas: ['Humano','Elfo','Anão','Halfling','Meio-Elfo','Meio-Orc','Tiefling','Draconato','Gnomo'],
+      ocupacoes: ['Tavernheiro','Ferreiro','Mercador','Guarda','Nobre','Camponês','Sacerdote','Ladrão','Mago','Bardo'],
+      tons: ['Amigável','Neutro','Desconfiado','Hostil','Excêntrico'],
+      aparencias: ['Cabelos grisalhos e barba longa','Marcas de queimadura no rosto','Olhos de cores diferentes','Tatuagens rituais nos braços','Cicatriz sobre o olho esquerdo','Roupas surradas e gastas','Aparência elegante mas descuidada','Cheiro forte de ervas'],
+      tracos: ['Fala muito rápido','Sempre sussurra','Ri em momentos errados','Cita provérbios antigos','Nunca olha nos olhos','Gesticula exageradamente','Tem um tique nervoso','Fala com sotaque carregado'],
+      ganchos: ['Deve um favor a alguém perigoso','Procura por um parente desaparecido','Testemunhou algo que não devia','Tem um mapa para um tesouro','Está sendo chantageado','Carrega uma maldição antiga','Faz parte de uma sociedade secreta','Está apaixonado por alguém proibido']
+    };
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function generateNPC() {
+      const rs = document.getElementById('npcRaca').value, os = document.getElementById('npcOcupacao').value, ts = document.getElementById('npcTom').value;
+      const nome = pick(npcData.nomes);
+      const raca = rs === 'Aleatório' ? pick(npcData.racas) : rs;
+      const ocup = os === 'Aleatório' ? pick(npcData.ocupacoes) : os;
+      const tom = ts === 'Aleatório' ? pick(npcData.tons) : ts;
+      document.getElementById('npcNome').textContent = `${nome}, ${raca} ${ocup}`;
+      document.getElementById('npcRacaResult').textContent = raca;
+      document.getElementById('npcOcupacaoResult').textContent = ocup;
+      document.getElementById('npcTomResult').textContent = tom;
+      document.getElementById('npcAparencia').textContent = pick(npcData.aparencias);
+      document.getElementById('npcTraco').textContent = pick(npcData.tracos);
+      document.getElementById('npcGancho').textContent = pick(npcData.ganchos);
+      document.getElementById('npcResult').style.display = 'block';
+    }
+
+    /* TESOURO */
+    function rollStr(q, s) { let t = 0; for (let i = 0; i < q; i++) t += Math.floor(Math.random() * s) + 1; return t; }
+    function rollTreasure() {
+      const d = Math.floor(Math.random() * 100) + 1; let r = '';
+      if (d <= 15) r = 'Nada além de poeira';
+      else if (d <= 30) r = `${rollStr(2,6)} moedas de cobre`;
+      else if (d <= 45) r = `${rollStr(3,6)} moedas de prata`;
+      else if (d <= 60) r = `${rollStr(2,10)} moedas de ouro`;
+      else if (d <= 70) r = `${rollStr(1,4)} gemas de 10 PO`;
+      else if (d <= 80) r = 'Poção de Cura';
+      else if (d <= 88) r = 'Item mágico incomum';
+      else if (d <= 95) r = 'Arma +1';
+      else if (d <= 99) r = 'Item mágico raro';
+      else r = 'Item lendário + 500 PO';
+      document.getElementById('treasureText').textContent = r;
+      document.getElementById('treasureResult').style.display = 'block';
+    }
+
+    /* MONSTROS */
+    const MONSTERS_STORAGE_KEY = 'forja_monstros_multi_v1';
+    const MONSTER_AUTOSAVE_DELAY = 700;
+    let monsters = [];
+    const monsterAutosaveTimers = {};
+
+    function createEmptyMonster() {
+      return {
+        monNome:'', monTipo:'Morto-Vivo', monTamanho:'Médio', monTendencia:'',
+        monVD:'', monXP:'', monProf:'',
+        monFor:10, monDes:10, monCon:10, monInt:10, monSab:10, monCar:10,
+        monPV:'', monDefesa:'', monDesloc:'', monIniciativa:'',
+        monPericias:'', monResistencias:'', monVulnerabilidades:'', monImunidades:'', monSentidos:'', monIdiomas:'',
+        monAcao1_nome:'', monAcao1_bonus:'', monAcao1_dano:'', monAcao1_desc:'',
+        monAcao2_nome:'', monAcao2_bonus:'', monAcao2_dano:'', monAcao2_desc:'',
+        monAcao3_nome:'', monAcao3_bonus:'', monAcao3_dano:'', monAcao3_desc:'',
+        monAcao4_nome:'', monAcao4_bonus:'', monAcao4_dano:'', monAcao4_desc:'',
+        monAcao5_nome:'', monAcao5_bonus:'', monAcao5_dano:'', monAcao5_desc:'',
+        monHabilidades:'', monAparencia:'', monComportamento:'', monHistoria:'', monTesouro:''
+      };
+    }
+
+    function renderMonsterBody(m) {
+      const d = m.data, id = m.id;
+      const tipoOpts = ['Morto-Vivo','Aberração','Besta','Celestial','Construto','Corrupto','Dragão','Elemental','Fada','Fiend','Gigante','Humanoide','Limo','Monstruosidade','Planta','Paranormal'].map(o => `<option ${d.monTipo === o ? 'selected' : ''}>${o}</option>`).join('');
+      const tamOpts = ['Minúsculo','Pequeno','Médio','Grande','Enorme','Colossal'].map(o => `<option ${d.monTamanho === o ? 'selected' : ''}>${o}</option>`).join('');
+      return `
+        <div class="monster-accordion-inner">
+          <div class="monster-brand"><i class="fas fa-skull me-1"></i>Bestiário</div>
+          <div class="monster-grid" style="margin-bottom:0.75rem;">
+            <div class="monster-field"><label>Tipo</label><select data-mid="${id}" data-field="monTipo">${tipoOpts}</select></div>
+            <div class="monster-field"><label>Tamanho</label><select data-mid="${id}" data-field="monTamanho">${tamOpts}</select></div>
+            <div class="monster-field"><label>Tendência</label><input type="text" data-mid="${id}" data-field="monTendencia" value="${escapeAttr(d.monTendencia)}" placeholder="Ex.: Caótico e Mau"></div>
+          </div>
+          <div class="monster-grid" style="margin-bottom:0.75rem;">
+            <div class="stat-box"><label>VD / ND</label><input type="text" data-mid="${id}" data-field="monVD" value="${escapeAttr(d.monVD)}" placeholder="Ex.: 5"></div>
+            <div class="stat-box"><label>XP</label><input type="text" data-mid="${id}" data-field="monXP" value="${escapeAttr(d.monXP)}" placeholder="Ex.: 1800"></div>
+            <div class="stat-box"><label>Bônus Prof.</label><input type="text" data-mid="${id}" data-field="monProf" value="${escapeAttr(d.monProf)}" placeholder="Ex.: +3"></div>
+          </div>
+          <div class="monster-block full">
+            <div class="monster-block-title">Atributos</div>
+            <div class="monster-attrs">
+              <div class="monster-attr"><div class="monster-attr-name">FOR</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monFor" value="${d.monFor}"></div>
+              <div class="monster-attr"><div class="monster-attr-name">DES</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monDes" value="${d.monDes}"></div>
+              <div class="monster-attr"><div class="monster-attr-name">CON</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monCon" value="${d.monCon}"></div>
+              <div class="monster-attr"><div class="monster-attr-name">INT</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monInt" value="${d.monInt}"></div>
+              <div class="monster-attr"><div class="monster-attr-name">SAB</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monSab" value="${d.monSab}"></div>
+              <div class="monster-attr"><div class="monster-attr-name">CAR</div><input type="number" class="monster-attr-value" data-mid="${id}" data-field="monCar" value="${d.monCar}"></div>
+            </div>
+          </div>
+          <div class="monster-grid" style="margin-bottom:0.75rem;">
+            <div class="stat-box"><label>PV</label><input type="text" data-mid="${id}" data-field="monPV" value="${escapeAttr(d.monPV)}" placeholder="Ex.: 45 (6d8+18)"></div>
+            <div class="stat-box"><label>Defesa / CA</label><input type="text" data-mid="${id}" data-field="monDefesa" value="${escapeAttr(d.monDefesa)}" placeholder="Ex.: 15"></div>
+            <div class="stat-box"><label>Deslocamento</label><input type="text" data-mid="${id}" data-field="monDesloc" value="${escapeAttr(d.monDesloc)}" placeholder="Ex.: 9m"></div>
+            <div class="stat-box"><label>Iniciativa</label><input type="text" data-mid="${id}" data-field="monIniciativa" value="${escapeAttr(d.monIniciativa)}" placeholder="Ex.: +2"></div>
+          </div>
+          <div class="monster-grid">
+            <div class="monster-block"><div class="monster-block-title">Perícias</div><textarea class="monster-textarea" data-mid="${id}" data-field="monPericias" rows="4">${escapeHtml(d.monPericias)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Resistências</div><textarea class="monster-textarea" data-mid="${id}" data-field="monResistencias" rows="4">${escapeHtml(d.monResistencias)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Vulnerabilidades</div><textarea class="monster-textarea" data-mid="${id}" data-field="monVulnerabilidades" rows="4">${escapeHtml(d.monVulnerabilidades)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Imunidades</div><textarea class="monster-textarea" data-mid="${id}" data-field="monImunidades" rows="4">${escapeHtml(d.monImunidades)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Sentidos</div><textarea class="monster-textarea" data-mid="${id}" data-field="monSentidos" rows="4">${escapeHtml(d.monSentidos)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Idiomas</div><textarea class="monster-textarea" data-mid="${id}" data-field="monIdiomas" rows="4">${escapeHtml(d.monIdiomas)}</textarea></div>
+          </div>
+          <div class="monster-block full" style="margin-top:0.6rem;">
+            <div class="monster-block-title">Ações</div>
+            <div class="table-scroll">
+              <table class="monster-table">
+                <thead><tr><th style="width:30%;">Nome</th><th style="width:15%;">Bônus/CD</th><th style="width:25%;">Dano/Efeito</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  ${[1,2,3,4,5].map(i => `<tr>
+                    <td><input type="text" data-mid="${id}" data-field="monAcao${i}_nome" value="${escapeAttr(d['monAcao'+i+'_nome'])}"></td>
+                    <td><input type="text" data-mid="${id}" data-field="monAcao${i}_bonus" value="${escapeAttr(d['monAcao'+i+'_bonus'])}"></td>
+                    <td><input type="text" data-mid="${id}" data-field="monAcao${i}_dano" value="${escapeAttr(d['monAcao'+i+'_dano'])}"></td>
+                    <td><input type="text" data-mid="${id}" data-field="monAcao${i}_desc" value="${escapeAttr(d['monAcao'+i+'_desc'])}"></td>
+                  </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="monster-block full" style="margin-top:0.6rem;">
+            <div class="monster-block-title">Habilidades Especiais</div>
+            <textarea class="monster-textarea" data-mid="${id}" data-field="monHabilidades" rows="6">${escapeHtml(d.monHabilidades)}</textarea>
+          </div>
+          <div class="monster-grid">
+            <div class="monster-block"><div class="monster-block-title">Aparência</div><textarea class="monster-textarea" data-mid="${id}" data-field="monAparencia" rows="5">${escapeHtml(d.monAparencia)}</textarea></div>
+            <div class="monster-block"><div class="monster-block-title">Comportamento</div><textarea class="monster-textarea" data-mid="${id}" data-field="monComportamento" rows="5">${escapeHtml(d.monComportamento)}</textarea></div>
+            <div class="monster-block full"><div class="monster-block-title">Lore / História</div><textarea class="monster-textarea" data-mid="${id}" data-field="monHistoria" rows="5">${escapeHtml(d.monHistoria)}</textarea></div>
+            <div class="monster-block full"><div class="monster-block-title">Tesouro / Recompensa</div><textarea class="monster-textarea" data-mid="${id}" data-field="monTesouro" rows="3">${escapeHtml(d.monTesouro)}</textarea></div>
+          </div>
+        </div>`;
+    }
+
+    function renderAllMonsters() {
+      const c = document.getElementById('monstersContainer'); if (!c) return;
+      if (monsters.length === 0) {
+        c.innerHTML = `<div class="monsters-empty"><i class="fas fa-dragon"></i><h4>Nenhum monstro criado ainda</h4><p>Clique em <strong>"Novo Monstro"</strong> para começar a forjar suas criaturas.</p></div>`;
+        updateMonsterIndicator(); return;
+      }
+      c.innerHTML = monsters.map(m => `
+        <div class="monster-accordion ${m.expanded ? 'expanded' : ''}" data-mid="${m.id}">
+          <div class="monster-accordion-header" onclick="toggleMonster('${m.id}', event)">
+            <div class="monster-accordion-title">
+              <i class="fas fa-dragon biome-icon"></i>
+              <div style="min-width:0; flex:1;">
+                <h3>${escapeHtml(m.data.monNome || 'Monstro sem nome')}</h3>
+                <span class="monster-subtitle">${escapeHtml(m.data.monTipo || '')} · ${escapeHtml(m.data.monTamanho || '')}${m.data.monVD ? ' · VD ' + escapeHtml(m.data.monVD) : ''}</span>
+              </div>
+            </div>
+            <div class="monster-accordion-actions" onclick="event.stopPropagation();">
+              <button title="Duplicar" onclick="duplicateMonster('${m.id}')"><i class="fas fa-copy"></i></button>
+              <button title="Exportar" onclick="exportOneMonster('${m.id}')"><i class="fas fa-file-export"></i></button>
+              <button class="danger" title="Deletar" onclick="deleteMonster('${m.id}')"><i class="fas fa-trash"></i></button>
+              <button class="chevron" title="Expandir/Minimizar" onclick="toggleMonster('${m.id}', event)"><i class="fas fa-chevron-down"></i></button>
+            </div>
+          </div>
+          <div class="monster-accordion-body">${renderMonsterBody(m)}</div>
+        </div>`).join('');
+      c.querySelectorAll('[data-mid][data-field]').forEach(el => {
+        el.addEventListener('input', handleMonsterFieldChange);
+        el.addEventListener('change', handleMonsterFieldChange);
+      });
+      updateMonsterIndicator();
+    }
+
+    function handleMonsterFieldChange(e) {
+      const el = e.target, mid = el.dataset.mid, f = el.dataset.field;
+      if (!mid || !f) return;
+      const m = monsters.find(x => x.id === mid); if (!m) return;
+      m.data[f] = el.value;
+      if (['monNome','monTipo','monTamanho','monVD'].includes(f)) {
+        const acc = document.querySelector(`.monster-accordion[data-mid="${mid}"]`);
+        if (acc) {
+          const h3 = acc.querySelector('h3'), sub = acc.querySelector('.monster-subtitle');
+          if (h3) h3.textContent = m.data.monNome || 'Monstro sem nome';
+          if (sub) sub.textContent = `${m.data.monTipo || ''} · ${m.data.monTamanho || ''}${m.data.monVD ? ' · VD ' + m.data.monVD : ''}`;
+        }
+      }
+      scheduleMonsterSave(mid);
+    }
+
+    function createMonster() {
+      const id = 'mon_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      monsters.push({ id, expanded: true, data: createEmptyMonster() });
+      monsters.forEach(m => { if (m.id !== id) m.expanded = false; });
+      renderAllMonsters(); saveMonsters();
+      setTimeout(() => { const a = document.querySelector(`.monster-accordion[data-mid="${id}"]`); if (a) a.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+      showToast('Novo monstro criado!', 'success');
+    }
+    function toggleMonster(id, ev) {
+      if (ev) ev.stopPropagation();
+      const m = monsters.find(x => x.id === id); if (!m) return;
+      m.expanded = !m.expanded;
+      const a = document.querySelector(`.monster-accordion[data-mid="${id}"]`);
+      if (a) a.classList.toggle('expanded', m.expanded);
+      saveMonsters();
+    }
+    function expandAllMonsters() { monsters.forEach(m => m.expanded = true); document.querySelectorAll('.monster-accordion').forEach(a => a.classList.add('expanded')); saveMonsters(); }
+    function collapseAllMonsters() { monsters.forEach(m => m.expanded = false); document.querySelectorAll('.monster-accordion').forEach(a => a.classList.remove('expanded')); saveMonsters(); }
+    function duplicateMonster(id) {
+      const o = monsters.find(x => x.id === id); if (!o) return;
+      const nid = 'mon_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const c = { id: nid, expanded: false, data: JSON.parse(JSON.stringify(o.data)) };
+      c.data.monNome = (c.data.monNome || 'Monstro') + ' (cópia)';
+      monsters.push(c); renderAllMonsters(); saveMonsters();
+      showToast('Monstro duplicado!', 'success');
+    }
+    function deleteMonster(id) {
+      const m = monsters.find(x => x.id === id); if (!m) return;
+      if (!confirm(`Deletar "${m.data.monNome || 'sem nome'}"?`)) return;
+      monsters = monsters.filter(x => x.id !== id); renderAllMonsters(); saveMonsters();
+      showToast('Monstro deletado.', 'info');
+    }
+    function saveMonsters() { try { localStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(monsters)); } catch(e) { console.error(e); } }
+    function loadMonsters() {
+      try {
+        const raw = localStorage.getItem(MONSTERS_STORAGE_KEY);
+        if (raw) { const p = JSON.parse(raw); if (Array.isArray(p)) monsters = p; }
+      } catch(e) {}
+    }
+    function scheduleMonsterSave(id) {
+      clearTimeout(monsterAutosaveTimers[id]);
+      monsterAutosaveTimers[id] = setTimeout(() => { saveMonsters(); updateMonsterIndicator(); }, MONSTER_AUTOSAVE_DELAY);
+    }
+    function updateMonsterIndicator() {
+      const el = document.getElementById('monsterSaveIndicator'); if (!el) return;
+      if (monsters.length === 0) { el.textContent = 'Nenhum monstro criado ainda'; return; }
+      const d = new Date();
+      el.textContent = `${monsters.length} ${monsters.length === 1 ? 'monstro salvo' : 'monstros salvos'} · ${d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
+    }
+    function exportOneMonster(id) {
+      const m = monsters.find(x => x.id === id); if (!m) return;
+      const b = new Blob([JSON.stringify(m.data, null, 2)], { type:'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+      const n = (m.data.monNome || 'criatura').trim().replace(/\s+/g, '_').toLowerCase();
+      a.download = `monstro_${n}.json`; a.click();
+      showToast('Monstro exportado!', 'success');
+    }
+    function exportAllMonsters() {
+      if (monsters.length === 0) { showToast('Nenhum monstro para exportar.', 'error'); return; }
+      const b = new Blob([JSON.stringify(monsters, null, 2)], { type:'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+      a.download = `monstros_${new Date().toISOString().slice(0,10)}.json`; a.click();
+      showToast(`${monsters.length} monstros exportados!`, 'success');
+    }
+    function importAllMonsters(inp) {
+      const f = inp.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = e => {
+        try {
+          const p = JSON.parse(e.target.result);
+          if (Array.isArray(p)) {
+            p.forEach(item => {
+              const id = item.id || ('mon_' + Date.now() + '_' + Math.floor(Math.random() * 1000));
+              const d = item.data || item;
+              monsters.push({ id, expanded: false, data: { ...createEmptyMonster(), ...d } });
+            });
+            showToast(`${p.length} monstros importados!`, 'success');
+          } else {
+            const id = 'mon_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            monsters.push({ id, expanded: true, data: { ...createEmptyMonster(), ...p } });
+            showToast('Monstro importado!', 'success');
+          }
+          renderAllMonsters(); saveMonsters();
+        } catch(e) { showToast('Arquivo inválido.', 'error'); }
+        inp.value = '';
+      };
+      r.readAsText(f);
+    }
+    function escapeAttr(s) { if (s === undefined || s === null) return ''; return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+    /* NAVBAR + TOPO */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
+    const btt = document.getElementById('backToTop');
+    if (btt) {
+      window.addEventListener('scroll', () => btt.classList.toggle('visible', window.scrollY > 300), { passive: true });
+      btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    /* LISTENERS ATRIBUTOS */
+    attrIds.forEach(id => { const e = document.getElementById(id); if (e) e.addEventListener('input', () => { updateAllMods(); markDirty(); }); });
+    t20AttrIds.forEach(id => { const e = document.getElementById(id); if (e) e.addEventListener('input', () => { updateT20Mods(); markDirty(); }); });
+    ['op_agi','op_for','op_int','op_pre','op_vig'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => { recalcAllOPRPGSkills(); updateOPRPGDefense(); markDirty(); });
+    });
+
+    /* INICIALIZAÇÃO */
+    window.addEventListener('DOMContentLoaded', () => {
+      buildT20SkillsTable();
+      buildT20EquipmentTable();
+      buildOPRPGSkillsTable();
+      buildOPRPGInventory();
+      loadSheet();
+      updateAllMods(); updateT20Mods();
+      recalcAllOPRPGSkills(); updateOPRPGDefense();
+
+      let sys = 'dnd5e';
+      try { sys = localStorage.getItem(STORAGE_SYSTEM) || 'dnd5e'; } catch(e) {}
+      showSystem(sys);
+
+      let area = 'herois';
+      try { area = localStorage.getItem('forja_area_ativa') || 'herois'; } catch(e) {}
+      showArea(area);
+
+      loadMonsters();
+      renderAllMonsters();
+
+      document.querySelectorAll('#area-herois input, #area-herois textarea').forEach(el => {
+        el.addEventListener('input', markDirty);
+        el.addEventListener('change', markDirty);
+      });
+
+      updateSaveIndicator();
+    });
+  </script>
+</body>
+</html>
