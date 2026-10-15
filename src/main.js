@@ -36,10 +36,10 @@ async function fichaHTML(elementId) {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
-
-            const html = await response.text();
-
-            console.log(`Ficha carregada: ${ficha}`, html);
+            
+            element.innerHTML = await response.text();
+            //const html = await response.text();
+            //console.log(`Ficha carregada: ${ficha}`, html);
 
         } catch (error) {
             console.error(`Erro ao carregar ${ficha}.html:`, error);
