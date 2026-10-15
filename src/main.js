@@ -20,5 +20,5 @@ async function includeHTML(elementId, path) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await includeHTML('mainNav', './inc/nav.html');
+    await includeHTML('mainNav', '/inc/nav.html');
 });
