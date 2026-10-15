@@ -28,7 +28,7 @@ async function fichaHTML(elementId) {
         return;
     }
 
-    const fichas = ['dd', 't20', 'op'];
+    const fichas = ['dd', 't20'];
     for (const ficha of fichas) {
         try {
             const response = await fetch(`./src/fichas/${ficha}.html`);
