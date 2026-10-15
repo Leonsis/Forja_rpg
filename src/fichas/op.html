@@ -1,0 +1,189 @@
+<!-- ========================================================
+        SISTEMA: ORDEM PARANORMAL
+======================================================== -->
+<div id="system-oprpg" class="system-panel">
+    <section style="padding-top: 1rem;">
+    <div class="container">
+        <div class="text-center mb-3">
+        <button class="btn btn-outline-marrom" onclick="resetSystem('oprpg')">
+            <i class="fas fa-rotate-left me-2"></i>Limpar Ficha de Ordem Paranormal
+        </button>
+        </div>
+
+        <div class="oprpg-sheet">
+        <div class="oprpg-header">
+            <div class="oprpg-title">ORDEM PARANORMAL</div>
+            <div class="oprpg-field"><span class="oprpg-field-label">Personagem</span><input class="oprpg-field-input" id="op_nome" placeholder="Nome do agente"></div>
+            <div class="oprpg-field"><span class="oprpg-field-label">Jogador</span><input class="oprpg-field-input" id="op_jogador" placeholder="Seu nome"></div>
+            <div class="oprpg-field"><span class="oprpg-field-label">Origem</span><input class="oprpg-field-input" id="op_origem" placeholder="Ex.: Militar"></div>
+            <div class="oprpg-field"><span class="oprpg-field-label">Classe</span><input class="oprpg-field-input" id="op_classe" placeholder="Ex.: Combatente"></div>
+        </div>
+
+        <div class="oprpg-grid">
+            <!-- Coluna esquerda -->
+            <div class="oprpg-col-left">
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Atributos</div>
+                <div class="oprpg-attrs">
+                <div class="oprpg-attr"><div class="oprpg-attr-name">AGI</div><div class="oprpg-attr-full">Agilidade</div><input type="number" class="oprpg-attr-value" id="op_agi" value="1" min="0" max="10"></div>
+                <div class="oprpg-attr"><div class="oprpg-attr-name">FOR</div><div class="oprpg-attr-full">Força</div><input type="number" class="oprpg-attr-value" id="op_for" value="1" min="0" max="10"></div>
+                <div class="oprpg-attr"><div class="oprpg-attr-name">INT</div><div class="oprpg-attr-full">Intelecto</div><input type="number" class="oprpg-attr-value" id="op_int" value="1" min="0" max="10"></div>
+                <div class="oprpg-attr"><div class="oprpg-attr-name">PRE</div><div class="oprpg-attr-full">Presença</div><input type="number" class="oprpg-attr-value" id="op_pre" value="1" min="0" max="10"></div>
+                <div class="oprpg-attr"><div class="oprpg-attr-name">VIG</div><div class="oprpg-attr-full">Vigor</div><input type="number" class="oprpg-attr-value" id="op_vig" value="1" min="0" max="10"></div>
+                </div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Status</div>
+                <div class="oprpg-status-grid">
+                <div class="oprpg-status-box">
+                    <label>Pontos de Vida</label>
+                    <div class="oprpg-status-inputs div-status">
+                    <div><span>Máx</span><input type="number" id="op_pv_max" value="20"></div>
+                    <div><span>Atual</span><input type="number" id="op_pv_atual" value="20"></div>
+                    </div>
+                </div>
+                <div class="oprpg-status-box">
+                    <label>Determinação</label>
+                    <div class="oprpg-status-inputs div-status">
+                    <div><span>Máx</span><input type="number" id="op_pd_max" value="2"></div>
+                    <div><span>Atual</span><input type="number" id="op_pd_atual" value="2"></div>
+                    </div>
+                </div>
+                <div class="oprpg-status-box">
+                    <label>Pontos de Esforço</label>
+                    <div class="oprpg-status-inputs div-status">
+                    <div><span>Máx</span><input type="number" id="op_pe_max" value="2"></div>
+                    <div><span>Atual</span><input type="number" id="op_pe_atual" value="2"></div>
+                    </div>
+                </div>
+                <div class="oprpg-status-box">
+                    <label>Sanidade</label>
+                    <div class="oprpg-status-inputs div-status">
+                    <div><span>Máx</span><input type="number" id="op_san_max" value="20"></div>
+                    <div><span>Atual</span><input type="number" id="op_san_atual" value="20"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Defesa & Deslocamento</div>
+                <div class="oprpg-field-row">
+                <div class="oprpg-defense-box">
+                    <label>Defesa</label>
+                    <input type="number" id="op_defesa" value="11" readonly>
+                    <div class="oprpg-defense-formula">= 10 + AGI + Equip + Outros</div>
+                    <div class="oprpg-field-row" style="margin-top:0.4rem;">
+                    <input type="number" id="op_def_equip" value="0" placeholder="Equip" oninput="updateOPRPGDefense()">
+                    <input type="number" id="op_def_outros" value="0" placeholder="Outros" oninput="updateOPRPGDefense()">
+                    </div>
+                </div>
+                <div class="oprpg-field" style="text-align:center;">
+                    <span class="oprpg-field-label">Desl.</span>
+                    <input class="oprpg-field-input" id="op_desloc" placeholder="9m" style="text-align:center; font-size:1.1rem;">
+                </div>
+                </div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Proteção & Resistências</div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Proteção</span><input class="oprpg-field-input" id="op_protecao" placeholder="Ex.: Colete, ritual..."></div>
+                <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Resistências</span><input class="oprpg-field-input" id="op_resistencias" placeholder="Ex.: Medo, morte, dano físico..."></div>
+            </div>
+            </div>
+
+            <!-- Coluna central -->
+            <div class="oprpg-col-mid">
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Perícias</div>
+                <div class="table-scroll">
+                <table class="oprpg-skills">
+                    <thead><tr><th style="width:32%;">Perícia</th><th style="width:14%;">Atr.</th><th style="width:14%;">Bônus</th><th style="width:14%;">Treino</th><th>Outros</th></tr></thead>
+                    <tbody id="oprpg-skills-body"></tbody>
+                </table>
+                </div>
+                <p style="font-size:0.7rem; color:var(--texto-suave); margin-top:0.5rem; font-style:italic;">* Penalidade de carga · + Somente treinada</p>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Ataques</div>
+                <div class="table-scroll">
+                <table class="oprpg-attack-table">
+                    <thead><tr><th style="width:35%;">Nome</th><th style="width:15%;">Teste</th><th style="width:25%;">Dano</th><th>Crítico / Especial</th></tr></thead>
+                    <tbody>
+                    <tr><td><input id="op_atk1_nome"></td><td><input id="op_atk1_teste"></td><td><input id="op_atk1_dano"></td><td><input id="op_atk1_crit"></td></tr>
+                    <tr><td><input id="op_atk2_nome"></td><td><input id="op_atk2_teste"></td><td><input id="op_atk2_dano"></td><td><input id="op_atk2_crit"></td></tr>
+                    <tr><td><input id="op_atk3_nome"></td><td><input id="op_atk3_teste"></td><td><input id="op_atk3_dano"></td><td><input id="op_atk3_crit"></td></tr>
+                    <tr><td><input id="op_atk4_nome"></td><td><input id="op_atk4_teste"></td><td><input id="op_atk4_dano"></td><td><input id="op_atk4_crit"></td></tr>
+                    <tr><td><input id="op_atk5_nome"></td><td><input id="op_atk5_teste"></td><td><input id="op_atk5_dano"></td><td><input id="op_atk5_crit"></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Inventário</div>
+                <div class="oprpg-inv-header">
+                <div class="oprpg-field"><span class="oprpg-field-label">Pontos de Prestígio</span><input class="oprpg-field-input" id="op_prestigio" placeholder="0"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Patente</span><input class="oprpg-field-input" id="op_patente_inv" placeholder="Recruta"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Limite de Crédito</span><input class="oprpg-field-input" id="op_credito" placeholder="Baixo"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Carga Máx.</span><input class="oprpg-field-input" id="op_carga" placeholder="Ex.: 10"></div>
+                </div>
+                <div class="oprpg-field-row" style="margin-top:0.5rem; gap:0.4rem;">
+                <div class="oprpg-field"><span class="oprpg-field-label">Limite I</span><input class="oprpg-field-input" id="op_lim1" placeholder="2"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Limite II</span><input class="oprpg-field-input" id="op_lim2" placeholder="2"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Limite III</span><input class="oprpg-field-input" id="op_lim3" placeholder="2"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Limite IV</span><input class="oprpg-field-input" id="op_lim4" placeholder="2"></div>
+                </div>
+                <div class="table-scroll" style="margin-top:0.5rem;">
+                <table class="oprpg-inv-table">
+                    <thead><tr><th style="width:35%;">Item</th><th style="width:20%;">Categoria</th><th style="width:15%;">Espaços</th><th style="width:15%;">Qtd</th><th>Peso</th></tr></thead>
+                    <tbody id="oprpg-inv-body"></tbody>
+                </table>
+                </div>
+            </div>
+            </div>
+
+            <!-- Coluna direita -->
+            <div class="oprpg-col-right">
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Evolução do Personagem</div>
+                <div class="oprpg-field-row">
+                <div class="oprpg-field"><span class="oprpg-field-label">NEX %</span><input class="oprpg-field-input" id="op_nex" placeholder="5"></div>
+                <div class="oprpg-field"><span class="oprpg-field-label">Nível</span><input class="oprpg-field-input" id="op_nivel" placeholder="1"></div>
+                </div>
+                <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Patente</span><input class="oprpg-field-input" id="op_patente" placeholder="Ex.: Recruta"></div>
+                <div class="oprpg-field" style="margin-top:0.4rem;"><span class="oprpg-field-label">Limite de PE / PD</span><input class="oprpg-field-input" id="op_limite_pe_pd" placeholder="Ex.: 5"></div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Habilidades & Rituais</div>
+                <div class="oprpg-field" style="margin-bottom:0.4rem;"><span class="oprpg-field-label">DT de Rituais</span><input class="oprpg-field-input" id="op_dt_rituais" placeholder="Ex.: 15"></div>
+                <div class="table-scroll">
+                <table class="oprpg-spells-table">
+                    <thead><tr><th style="width:35%;">Nome</th><th style="width:12%;">Custo</th><th style="width:12%;">Página</th><th>Descrição</th></tr></thead>
+                    <tbody>
+                    <tr><td><input id="op_hab1_nome"></td><td><input id="op_hab1_custo"></td><td><input id="op_hab1_pag"></td><td><input id="op_hab1_desc"></td></tr>
+                    <tr><td><input id="op_hab2_nome"></td><td><input id="op_hab2_custo"></td><td><input id="op_hab2_pag"></td><td><input id="op_hab2_desc"></td></tr>
+                    <tr><td><input id="op_hab3_nome"></td><td><input id="op_hab3_custo"></td><td><input id="op_hab3_pag"></td><td><input id="op_hab3_desc"></td></tr>
+                    <tr><td><input id="op_hab4_nome"></td><td><input id="op_hab4_custo"></td><td><input id="op_hab4_pag"></td><td><input id="op_hab4_desc"></td></tr>
+                    <tr><td><input id="op_hab5_nome"></td><td><input id="op_hab5_custo"></td><td><input id="op_hab5_pag"></td><td><input id="op_hab5_desc"></td></tr>
+                    <tr><td><input id="op_hab6_nome"></td><td><input id="op_hab6_custo"></td><td><input id="op_hab6_pag"></td><td><input id="op_hab6_desc"></td></tr>
+                    <tr><td><input id="op_hab7_nome"></td><td><input id="op_hab7_custo"></td><td><input id="op_hab7_pag"></td><td><input id="op_hab7_desc"></td></tr>
+                    <tr><td><input id="op_hab8_nome"></td><td><input id="op_hab8_custo"></td><td><input id="op_hab8_pag"></td><td><input id="op_hab8_desc"></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="oprpg-block">
+                <div class="oprpg-block-title">Anotações</div>
+                <textarea class="oprpg-textarea" id="op_anotacoes" rows="8" placeholder="História, personalidade, objetivos, contatos..."></textarea>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+</div>
