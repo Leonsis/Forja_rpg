@@ -1,0 +1,144 @@
+<!-- ========================================================
+        SISTEMA: TORMENTA 20
+======================================================== -->
+<div id="system-t20" class="system-panel">
+    <section style="padding-top: 1rem;">
+    <div class="container">
+        <div class="text-center mb-3">
+        <button class="btn btn-outline-marrom" onclick="resetSystem('t20')">
+            <i class="fas fa-rotate-left me-2"></i>Limpar Ficha de Tormenta 20
+        </button>
+        </div>
+
+        <div class="t20-sheet">
+        <div class="t20-header">
+            <div class="t20-title">TORMENTA 20</div>
+            <div class="t20-field full"><span class="t20-field-label">Personagem</span><input class="t20-field-input" id="t20_nome"></div>
+            <div class="t20-field"><span class="t20-field-label">Jogador</span><input class="t20-field-input" id="t20_jogador"></div>
+            <div class="t20-field"><span class="t20-field-label">Raça</span><input class="t20-field-input" id="t20_raca"></div>
+            <div class="t20-field"><span class="t20-field-label">Origem</span><input class="t20-field-input" id="t20_origem"></div>
+            <div class="t20-field"><span class="t20-field-label">Classe & Nível</span><input class="t20-field-input" id="t20_classeNivel"></div>
+            <div class="t20-field"><span class="t20-field-label">Divindade</span><input class="t20-field-input" id="t20_divindade"></div>
+            <div class="t20-field"><span class="t20-field-label">Deslocamento</span><input class="t20-field-input" id="t20_deslocamento"></div>
+        </div>
+
+        <div class="t20-grid">
+            <!-- Coluna esquerda -->
+            <div class="t20-col-left">
+            <div class="t20-block">
+                <div class="t20-block-title">Atributos</div>
+                <div class="t20-attrs">
+                <div class="t20-attr"><div class="t20-attr-name">FOR</div><input type="number" class="t20-attr-value" id="t20_for" value="10"><span class="t20-attr-mod" id="t20_for_mod">+0</span></div>
+                <div class="t20-attr"><div class="t20-attr-name">DES</div><input type="number" class="t20-attr-value" id="t20_des" value="10"><span class="t20-attr-mod" id="t20_des_mod">+0</span></div>
+                <div class="t20-attr"><div class="t20-attr-name">CON</div><input type="number" class="t20-attr-value" id="t20_con" value="10"><span class="t20-attr-mod" id="t20_con_mod">+0</span></div>
+                <div class="t20-attr"><div class="t20-attr-name">INT</div><input type="number" class="t20-attr-value" id="t20_int" value="10"><span class="t20-attr-mod" id="t20_int_mod">+0</span></div>
+                <div class="t20-attr"><div class="t20-attr-name">SAB</div><input type="number" class="t20-attr-value" id="t20_sab" value="10"><span class="t20-attr-mod" id="t20_sab_mod">+0</span></div>
+                <div class="t20-attr"><div class="t20-attr-name">CAR</div><input type="number" class="t20-attr-value" id="t20_car" value="10"><span class="t20-attr-mod" id="t20_car_mod">+0</span></div>
+                </div>
+            </div>
+
+            <div class="t20-pv-row">
+                <div class="t20-pv-box">
+                <div class="t20-pv-title">Pontos de Vida</div>
+                <div class="t20-pv-inputs">
+                    <div class="t20-pv-item"><span>Máx</span><input type="number" id="t20_pv_max" value="20"></div>
+                    <div class="t20-pv-item"><span>Atuais</span><input type="number" id="t20_pv_atual" value="20"></div>
+                </div>
+                </div>
+                <div class="t20-pv-box">
+                <div class="t20-pv-title">Pontos de Mana</div>
+                <div class="t20-pv-inputs">
+                    <div class="t20-pv-item"><span>Máx</span><input type="number" id="t20_pm_max" value="10"></div>
+                    <div class="t20-pv-item"><span>Atuais</span><input type="number" id="t20_pm_atual" value="10"></div>
+                </div>
+                </div>
+            </div>
+
+            <div class="t20-block">
+                <div class="t20-block-title">Ataques</div>
+                <div class="table-scroll">
+                <table class="t20-attack-table">
+                    <thead><tr><th style="width:30%;">Ataque</th><th style="width:15%;">Teste</th><th style="width:15%;">Dano</th><th style="width:13%;">Crít</th><th style="width:13%;">Tipo</th><th>Alcance</th></tr></thead>
+                    <tbody>
+                    <tr><td><input id="t20_atk1_nome"></td><td><input id="t20_atk1_teste"></td><td><input id="t20_atk1_dano"></td><td><input id="t20_atk1_crit"></td><td><input id="t20_atk1_tipo"></td><td><input id="t20_atk1_alc"></td></tr>
+                    <tr><td><input id="t20_atk2_nome"></td><td><input id="t20_atk2_teste"></td><td><input id="t20_atk2_dano"></td><td><input id="t20_atk2_crit"></td><td><input id="t20_atk2_tipo"></td><td><input id="t20_atk2_alc"></td></tr>
+                    <tr><td><input id="t20_atk3_nome"></td><td><input id="t20_atk3_teste"></td><td><input id="t20_atk3_dano"></td><td><input id="t20_atk3_crit"></td><td><input id="t20_atk3_tipo"></td><td><input id="t20_atk3_alc"></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="t20-block">
+                <div class="t20-block-title">Defesa</div>
+                <div class="t20-defense">
+                <div class="t20-defense-main"><label>Defesa</label><input type="number" id="t20_defesa" value="10"></div>
+                <div class="t20-defense-sub">
+                    <div class="t20-pv-item"><span>Mod. DES</span><input type="number" id="t20_def_des" value="0"></div>
+                    <div class="t20-pv-item"><span>Armadura</span><input type="number" id="t20_def_armadura" value="0"></div>
+                    <div class="t20-pv-item"><span>Escudo</span><input type="number" id="t20_def_escudo" value="0"></div>
+                    <div class="t20-pv-item"><span>Outros</span><input type="number" id="t20_def_outros" value="0"></div>
+                </div>
+                </div>
+            </div>
+
+            <div class="t20-pv-row">
+                <div class="t20-field"><span class="t20-field-label">XP</span><input class="t20-field-input" id="t20_xp"></div>
+                <div class="t20-field"><span class="t20-field-label">Tamanho</span><input class="t20-field-input" id="t20_tamanho"></div>
+            </div>
+            </div>
+
+            <!-- Coluna central -->
+            <div class="t20-col-mid">
+            <div class="t20-block">
+                <div class="t20-block-title">Perícias</div>
+                <div class="table-scroll">
+                <table class="t20-skills">
+                    <thead><tr><th style="width:30%;">Perícia</th><th style="width:14%;">Total</th><th style="width:12%;">1/2 Nív.</th><th style="width:14%;">Mod. Atr.</th><th style="width:12%;">Treino</th><th>Outros</th></tr></thead>
+                    <tbody id="t20-skills-body"></tbody>
+                </table>
+                </div>
+            </div>
+            <div class="t20-block">
+                <div class="t20-block-title">Proficiências</div>
+                <textarea id="t20_proficiencias" rows="4" style="width:100%; border:none; background:transparent; font-family:'EB Garamond',serif; font-size:0.9rem; outline:none; resize:vertical; min-height:80px;"></textarea>
+            </div>
+            </div>
+
+            <!-- Coluna direita -->
+            <div class="t20-col-right">
+            <div class="t20-block">
+                <div class="t20-block-title">Poderes & Magias</div>
+                <div class="table-scroll">
+                <table class="t20-spells-table">
+                    <thead><tr><th style="width:40%;">Nome</th><th style="width:15%;">Custo</th><th style="width:20%;">Execução</th><th>Alcance</th></tr></thead>
+                    <tbody>
+                    <tr><td><input id="t20_pod1_nome"></td><td><input id="t20_pod1_custo"></td><td><input id="t20_pod1_exec"></td><td><input id="t20_pod1_alc"></td></tr>
+                    <tr><td><input id="t20_pod2_nome"></td><td><input id="t20_pod2_custo"></td><td><input id="t20_pod2_exec"></td><td><input id="t20_pod2_alc"></td></tr>
+                    <tr><td><input id="t20_pod3_nome"></td><td><input id="t20_pod3_custo"></td><td><input id="t20_pod3_exec"></td><td><input id="t20_pod3_alc"></td></tr>
+                    <tr><td><input id="t20_pod4_nome"></td><td><input id="t20_pod4_custo"></td><td><input id="t20_pod4_exec"></td><td><input id="t20_pod4_alc"></td></tr>
+                    <tr><td><input id="t20_pod5_nome"></td><td><input id="t20_pod5_custo"></td><td><input id="t20_pod5_exec"></td><td><input id="t20_pod5_alc"></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="t20-block">
+                <div class="t20-block-title">Equipamento</div>
+                <div class="table-scroll">
+                <table class="t20-equip-table">
+                    <thead><tr><th style="width:70%;">Item</th><th>Peso</th></tr></thead>
+                    <tbody id="t20-equip-body"></tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="t20-block">
+                <div class="t20-block-title">Anotações</div>
+                <textarea id="t20_anotacoes" rows="6" style="width:100%; border:none; background:transparent; font-family:'EB Garamond',serif; font-size:0.9rem; outline:none; resize:vertical; min-height:120px;"></textarea>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+</div>
