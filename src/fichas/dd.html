@@ -1,0 +1,219 @@
+<!-- ========================================================
+        SISTEMA: D&D 5e
+======================================================== -->
+<div id="system-dnd5e" class="system-panel active">
+    <section style="padding-top: 1rem;">
+    <div class="container">
+        <div class="text-center mb-3">
+        <button class="btn btn-outline-marrom" onclick="resetSystem('dnd5e')">
+            <i class="fas fa-rotate-left me-2"></i>Limpar Ficha de D&D 5e
+        </button>
+        </div>
+
+        <!-- Página 1: Identidade + Atributos + Combate -->
+        <div class="sheet-wrap">
+        <div class="sheet-header primary">
+            <div class="t20-title">D&D</div>
+            <div class="field"><span class="field-label">Nome do Personagem</span><input class="field-input" id="nome" placeholder="Nome do herói"></div>
+            <div class="field"><span class="field-label">Classe e Nível</span><input class="field-input" id="classeNivel" placeholder="Ex.: Mago 3"></div>
+            <div class="field"><span class="field-label">Antecedente</span><input class="field-input" id="antecedente" placeholder="Ex.: Sábio"></div>
+            <div class="field"><span class="field-label">Nome do Jogador</span><input class="field-input" id="jogador" placeholder="Seu nome"></div>
+        </div>
+        <div class="sheet-header secondary">
+            <div class="field"><span class="field-label">Raça</span><input class="field-input" id="raca" placeholder="Ex.: Elfo"></div>
+            <div class="field"><span class="field-label">Tendência</span><input class="field-input" id="tendencia" placeholder="Ex.: Neutro e Bom"></div>
+            <div class="field"><span class="field-label">XP</span><input class="field-input" id="xp" placeholder="0"></div>
+            <div class="field"><span class="field-label">Idade / Altura / Peso</span><input class="field-input" id="fisico" placeholder="120 anos · 1,75m · 65kg"></div>
+        </div>
+
+        <div class="sheet-grid">
+            <!-- COLUNA 1: Atributos + Resistências + Perícias -->
+            <div>
+            <div class="attr-block"><div class="attr-name">Força</div><div class="attr-values"><input class="attr-value-input" id="forca" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="forcaMod" value="+0" readonly></div></div>
+            <div class="attr-block"><div class="attr-name">Destreza</div><div class="attr-values"><input class="attr-value-input" id="destreza" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="destrezaMod" value="+0" readonly></div></div>
+            <div class="attr-block"><div class="attr-name">Constituição</div><div class="attr-values"><input class="attr-value-input" id="constituicao" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="constituicaoMod" value="+0" readonly></div></div>
+            <div class="attr-block"><div class="attr-name">Inteligência</div><div class="attr-values"><input class="attr-value-input" id="inteligencia" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="inteligenciaMod" value="+0" readonly></div></div>
+            <div class="attr-block"><div class="attr-name">Sabedoria</div><div class="attr-values"><input class="attr-value-input" id="sabedoria" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="sabedoriaMod" value="+0" readonly></div></div>
+            <div class="attr-block"><div class="attr-name">Carisma</div><div class="attr-values"><input class="attr-value-input" id="carisma" type="number" value="10" min="1" max="30"><input class="attr-mod-input" id="carismaMod" value="+0" readonly></div></div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-bottom:0.65rem;">
+                <div class="combat-cell"><label>Inspiração</label><input type="number" id="inspiracao" value="0"></div>
+                <div class="combat-cell"><label>Prof.</label><input type="number" id="profBonus" value="2"></div>
+            </div>
+
+            <div class="block">
+                <div class="block-title">Testes de Resistência</div>
+                <ul class="check-list">
+                <li class="check-item"><input type="checkbox" id="resForca"><input class="mod" value="+0"><span class="name">Força</span></li>
+                <li class="check-item"><input type="checkbox" id="resDestreza"><input class="mod" value="+0"><span class="name">Destreza</span></li>
+                <li class="check-item"><input type="checkbox" id="resConstituicao"><input class="mod" value="+0"><span class="name">Constituição</span></li>
+                <li class="check-item"><input type="checkbox" id="resInteligencia"><input class="mod" value="+0"><span class="name">Inteligência</span></li>
+                <li class="check-item"><input type="checkbox" id="resSabedoria"><input class="mod" value="+0"><span class="name">Sabedoria</span></li>
+                <li class="check-item"><input type="checkbox" id="resCarisma"><input class="mod" value="+0"><span class="name">Carisma</span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <div class="block-title">Perícias</div>
+                <ul class="check-list">
+                <li class="check-item"><input type="checkbox" id="perAcrobacia"><input class="mod" value="+0"><span class="name">Acrobacia</span><span class="attr-ref">(Des)</span></li>
+                <li class="check-item"><input type="checkbox" id="perArcanismo"><input class="mod" value="+0"><span class="name">Arcanismo</span><span class="attr-ref">(Int)</span></li>
+                <li class="check-item"><input type="checkbox" id="perAtletismo"><input class="mod" value="+0"><span class="name">Atletismo</span><span class="attr-ref">(For)</span></li>
+                <li class="check-item"><input type="checkbox" id="perAtuacao"><input class="mod" value="+0"><span class="name">Atuação</span><span class="attr-ref">(Car)</span></li>
+                <li class="check-item"><input type="checkbox" id="perBlefar"><input class="mod" value="+0"><span class="name">Blefar</span><span class="attr-ref">(Car)</span></li>
+                <li class="check-item"><input type="checkbox" id="perFurtividade"><input class="mod" value="+0"><span class="name">Furtividade</span><span class="attr-ref">(Des)</span></li>
+                <li class="check-item"><input type="checkbox" id="perHistoria"><input class="mod" value="+0"><span class="name">História</span><span class="attr-ref">(Int)</span></li>
+                <li class="check-item"><input type="checkbox" id="perIntimidacao"><input class="mod" value="+0"><span class="name">Intimidação</span><span class="attr-ref">(Car)</span></li>
+                <li class="check-item"><input type="checkbox" id="perIntuicao"><input class="mod" value="+0"><span class="name">Intuição</span><span class="attr-ref">(Sab)</span></li>
+                <li class="check-item"><input type="checkbox" id="perInvestigacao"><input class="mod" value="+0"><span class="name">Investigação</span><span class="attr-ref">(Int)</span></li>
+                <li class="check-item"><input type="checkbox" id="perLidarAnimais"><input class="mod" value="+0"><span class="name">Lidar com Animais</span><span class="attr-ref">(Sab)</span></li>
+                <li class="check-item"><input type="checkbox" id="perMedicina"><input class="mod" value="+0"><span class="name">Medicina</span><span class="attr-ref">(Sab)</span></li>
+                <li class="check-item"><input type="checkbox" id="perNatureza"><input class="mod" value="+0"><span class="name">Natureza</span><span class="attr-ref">(Int)</span></li>
+                <li class="check-item"><input type="checkbox" id="perPercepcao"><input class="mod" value="+0"><span class="name">Percepção</span><span class="attr-ref">(Sab)</span></li>
+                <li class="check-item"><input type="checkbox" id="perPersuasao"><input class="mod" value="+0"><span class="name">Persuasão</span><span class="attr-ref">(Car)</span></li>
+                <li class="check-item"><input type="checkbox" id="perPrestidigitacao"><input class="mod" value="+0"><span class="name">Prestidigitação</span><span class="attr-ref">(Des)</span></li>
+                <li class="check-item"><input type="checkbox" id="perReligiao"><input class="mod" value="+0"><span class="name">Religião</span><span class="attr-ref">(Int)</span></li>
+                <li class="check-item"><input type="checkbox" id="perSobrevivencia"><input class="mod" value="+0"><span class="name">Sobrevivência</span><span class="attr-ref">(Sab)</span></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <div class="block-title">Sabedoria Passiva</div>
+                <input class="field-input" id="sabPassiva" style="text-align:center; font-size:1.05rem; color:var(--vermelho); font-weight:700;" placeholder="10">
+            </div>
+            </div>
+
+            <!-- COLUNA 2: Combate + Ataques + Equipamento -->
+            <div>
+            <div class="combat-row">
+                <div class="combat-cell"><label>CA</label><input type="number" id="ca" value="10"></div>
+                <div class="combat-cell"><label>Iniciativa</label><input type="number" id="iniciativa" value="0"></div>
+                <div class="combat-cell"><label>Desloc.</label><input type="number" id="deslocamento" value="9"></div>
+            </div>
+
+            <div class="hp-block">
+                <div class="block-title" style="margin-top:-0.75rem;">Pontos de Vida</div>
+                <div class="hp-row">
+                <div class="hp-cell"><span>PV Totais</span><input type="number" id="pvTotal" value="10"></div>
+                <div class="hp-cell"><span>PV Atuais</span><input type="number" id="pvAtual" value="10"></div>
+                </div>
+                <div class="hp-row">
+                <div class="hp-cell" style="grid-column: span 2;"><span>PV Temporários</span><input type="number" id="pvTemp" value="0"></div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-bottom:0.65rem;">
+                <div class="combat-cell"><label>Dados de Vida</label><input id="dadosVida" placeholder="Ex.: 3d8"></div>
+                <div class="combat-cell">
+                <label>Testes contra Morte</label>
+                <div style="font-size:0.72rem; display:flex; justify-content:space-around; gap:0.3rem; margin-top:0.25rem; flex-wrap:wrap;">
+                    <span>Sucessos: <input type="number" id="morteSuc" value="0" style="width:32px; border:1px solid var(--marrom); text-align:center; background:#fff; border-radius:2px;"></span>
+                    <span>Falhas: <input type="number" id="morteFal" value="0" style="width:32px; border:1px solid var(--marrom); text-align:center; background:#fff; border-radius:2px;"></span>
+                </div>
+                </div>
+            </div>
+
+            <div class="block">
+                <div class="block-title">Ataques e Magias</div>
+                <div class="table-scroll">
+                <table class="attack-table">
+                    <thead><tr><th style="width:45%;">Nome</th><th style="width:20%;">Bônus</th><th>Dano / Tipo</th></tr></thead>
+                    <tbody>
+                    <tr><td><input id="atk1_nome"></td><td><input id="atk1_bonus"></td><td><input id="atk1_dano"></td></tr>
+                    <tr><td><input id="atk2_nome"></td><td><input id="atk2_bonus"></td><td><input id="atk2_dano"></td></tr>
+                    <tr><td><input id="atk3_nome"></td><td><input id="atk3_bonus"></td><td><input id="atk3_dano"></td></tr>
+                    <tr><td><input id="atk4_nome"></td><td><input id="atk4_bonus"></td><td><input id="atk4_dano"></td></tr>
+                    <tr><td><input id="atk5_nome"></td><td><input id="atk5_bonus"></td><td><input id="atk5_dano"></td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            <div class="big-block"><label>Equipamento</label><textarea id="equipamento" rows="5"></textarea></div>
+            <div class="big-block" style="margin-top:0.65rem;"><label>Idiomas e Outras Proficiências</label><textarea id="idiomas" rows="3"></textarea></div>
+            </div>
+
+            <!-- COLUNA 3: Personalidade + Características -->
+            <div>
+            <div class="trait-block"><label>Traços de Personalidade</label><textarea id="tracos" rows="4"></textarea></div>
+            <div class="trait-block"><label>Ideais</label><textarea id="ideais" rows="3"></textarea></div>
+            <div class="trait-block"><label>Ligações</label><textarea id="ligacoes" rows="3"></textarea></div>
+            <div class="trait-block"><label>Defeitos</label><textarea id="defeitos" rows="3"></textarea></div>
+            <div class="big-block" style="margin-top:0.65rem;"><label>Características e Habilidades</label><textarea id="caracteristicas" rows="8"></textarea></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Página 2: Aparência / Aliados / História -->
+        <div class="sheet-wrap">
+        <div class="page2-header">
+            <div class="field"><span class="field-label">Nome do Personagem</span><input class="field-input" id="nome2"></div>
+            <div class="field"><span class="field-label">Idade / Altura / Peso</span><input class="field-input" id="fisico2"></div>
+            <div class="field"><span class="field-label">Olhos / Pele / Cabelos</span><input class="field-input" id="aparenciaFisica"></div>
+        </div>
+        <div class="page2-grid">
+            <div class="big-block"><label>Aparência</label><textarea id="aparencia" rows="10"></textarea></div>
+            <div class="big-block"><label>Aliados e Organizações</label><textarea id="aliados" rows="4"></textarea></div>
+            <div class="big-block"><label>Símbolo</label><textarea id="simbolo" rows="3"></textarea></div>
+            <div class="big-block"><label>Outras Características</label><textarea id="outrasCarac" rows="4"></textarea></div>
+            <div class="big-block"><label>História do Personagem</label><textarea id="historia" rows="10"></textarea></div>
+            <div class="big-block"><label>Tesouro</label><textarea id="tesouro" rows="4"></textarea></div>
+        </div>
+        </div>
+
+        <!-- Página 3: Grimório -->
+        <div class="sheet-wrap">
+        <h3 style="text-align:center; margin-bottom:1.25rem; font-family:'Cinzel',serif; font-size:clamp(1.1rem,3vw,1.5rem);">
+            <i class="fas fa-hat-wizard" style="color:var(--vermelho);"></i> Grimório
+        </h3>
+        <div class="spell-slots">
+            <div class="slot-box"><label>Truques</label><input type="number" id="slot0" value="0"></div>
+            <div class="slot-box"><label>Nível 1</label><input type="number" id="slot1" value="0"></div>
+            <div class="slot-box"><label>Nível 2</label><input type="number" id="slot2" value="0"></div>
+            <div class="slot-box"><label>Nível 3</label><input type="number" id="slot3" value="0"></div>
+            <div class="slot-box"><label>Nível 4</label><input type="number" id="slot4" value="0"></div>
+            <div class="slot-box"><label>Nível 5</label><input type="number" id="slot5" value="0"></div>
+            <div class="slot-box"><label>Nível 6</label><input type="number" id="slot6" value="0"></div>
+            <div class="slot-box"><label>Nível 7</label><input type="number" id="slot7" value="0"></div>
+            <div class="slot-box"><label>Nível 8</label><input type="number" id="slot8" value="0"></div>
+            <div class="slot-box"><label>Nível 9</label><input type="number" id="slot9" value="0"></div>
+        </div>
+
+        <div class="spell-level-header">Truques</div>
+        <div class="table-scroll">
+            <table class="spell-table">
+            <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+            <tbody>
+                <tr><td><input id="magia0_1_nome"></td><td><input id="magia0_1_tempo"></td><td><input id="magia0_1_alcance"></td><td><input id="magia0_1_efeito"></td></tr>
+                <tr><td><input id="magia0_2_nome"></td><td><input id="magia0_2_tempo"></td><td><input id="magia0_2_alcance"></td><td><input id="magia0_2_efeito"></td></tr>
+                <tr><td><input id="magia0_3_nome"></td><td><input id="magia0_3_tempo"></td><td><input id="magia0_3_alcance"></td><td><input id="magia0_3_efeito"></td></tr>
+            </tbody>
+            </table>
+        </div>
+
+        <div class="spell-level-header">1º Nível</div>
+        <div class="table-scroll">
+            <table class="spell-table">
+            <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+            <tbody>
+                <tr><td><input id="magia1_1_nome"></td><td><input id="magia1_1_tempo"></td><td><input id="magia1_1_alcance"></td><td><input id="magia1_1_efeito"></td></tr>
+                <tr><td><input id="magia1_2_nome"></td><td><input id="magia1_2_tempo"></td><td><input id="magia1_2_alcance"></td><td><input id="magia1_2_efeito"></td></tr>
+                <tr><td><input id="magia1_3_nome"></td><td><input id="magia1_3_tempo"></td><td><input id="magia1_3_alcance"></td><td><input id="magia1_3_efeito"></td></tr>
+            </tbody>
+            </table>
+        </div>
+
+        <div class="spell-level-header">2º Nível</div>
+        <div class="table-scroll">
+            <table class="spell-table">
+            <thead><tr><th style="width:40%;">Nome</th><th style="width:20%;">Tempo</th><th style="width:15%;">Alcance</th><th>Efeito</th></tr></thead>
+            <tbody>
+                <tr><td><input id="magia2_1_nome"></td><td><input id="magia2_1_tempo"></td><td><input id="magia2_1_alcance"></td><td><input id="magia2_1_efeito"></td></tr>
+                <tr><td><input id="magia2_2_nome"></td><td><input id="magia2_2_tempo"></td><td><input id="magia2_2_alcance"></td><td><input id="magia2_2_efeito"></td></tr>
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    </section>
+</div>
