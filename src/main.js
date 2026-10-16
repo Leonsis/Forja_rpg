@@ -18,18 +18,6 @@ async function incHTML(elementId, path) {
         console.error(`Erro ao carregar ${path}:`, error);
     }
 }
-
-async function fichaHTML(elementId) {
-    
-    const element = document.getElementById(elementId);
-
-    if (!element) {
-        console.error(`Elemento #${elementId} não encontrado.`);
-        return;
-    }
-
-    const fichas = ['dd', 't20'];
-    for (const ficha of fichas) {
  
 async function fichaHTML(elementId) {
     const element = document.getElementById(elementId);
