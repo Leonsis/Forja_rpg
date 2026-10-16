@@ -3,345 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Forja de RPG — Heróis, Mestre e Monstros</title>
-  <meta name="description" content="Plataforma completa de RPG: D&D 5e, Tormenta 20, Ordem Paranormal, ferramentas do mestre e bestiário.">
+  <title>Forja de RPG — Sobre o Projeto</title>
+  <meta name="description" content="Conheça a Forja de RPG: projeto open-source criado por Caio Leonni. Fichas digitais para D&D 5e, Tormenta 20 e Ordem Paranormal.">
+  <meta name="author" content="Caio Leonni">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath fill='hsl(40,62%25,45%25)' d='M205.4 66.3C167 56 127.5 78.8 117.3 117.2L66.5 306.7C56.2 345.1 79 384.6 117.4 394.9L306.9 445.7C345.3 456 384.8 433.2 395.1 394.8L445.9 205.3C456.2 166.9 433.4 127.4 395 117.1L205.4 66.3zM228.4 272C222.3 262.1 222.1 249.6 227.8 239.5C233.5 229.4 244.3 223.2 256 223.3C267.6 223.4 278.2 229.8 283.8 240C289.9 249.9 290.1 262.4 284.4 272.5C278.7 282.6 267.9 288.8 256.2 288.7C244.6 288.6 234 282.2 228.4 272zM143.2 284.3C153.1 278.2 165.6 278 175.7 283.7C185.8 289.4 192 300.2 191.9 311.9C191.8 323.5 185.4 334.1 175.2 339.7C165.3 345.8 152.8 346 142.7 340.3C132.6 334.6 126.4 323.8 126.5 312.1C126.6 300.5 133 289.9 143.2 284.3zM328.2 380.7C318.3 386.8 305.8 387 295.7 381.3C285.6 375.6 279.4 364.8 279.5 353.1C279.6 341.5 286 330.9 296.2 325.3C306.1 319.2 318.6 319 328.7 324.7C338.8 330.4 345 341.2 344.9 352.9C344.8 364.5 338.4 375.1 328.2 380.7zM337.2 172.3C347.1 166.2 359.6 166 369.7 171.7C379.8 177.4 386 188.2 385.9 199.9C385.8 211.5 379.4 222.1 369.2 227.7C359.3 233.8 346.8 234 336.7 228.3C326.6 222.6 320.4 211.8 320.5 200.1C320.6 188.5 327 177.9 337.2 172.3zM216.2 186.7C206.3 192.8 193.8 193 183.7 187.3C173.6 181.6 167.4 170.8 167.5 159.1C167.6 147.5 174 136.9 184.2 131.3C194.1 125.2 206.6 125 216.7 130.7C226.8 136.4 233 147.2 232.9 158.9C232.8 170.5 226.4 181.1 216.2 186.7zM482 256L441.4 407.2C424.2 471.2 358.4 509.2 294.4 492.1L256.1 481.8L256.1 512C256.1 547.3 284.8 576 320.1 576L512.1 576C547.4 576 576.1 547.3 576.1 512L576.1 320C576.1 284.7 547.4 256 512.1 256L482 256z'/%3E%3C/svg%3E">
   <!-- Bootstrap + Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS -->
+  <!-- CSS principal do projeto -->
   <link rel="stylesheet" href="src/main.css">
-  <script src="src/main.js" defer></script>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
- 
-  </nav>
-
+    <div class="text-center mt-4 mb-5 reveal">
+        <a href="home.html" class="back-to-system">
+            <i class="fas fa-arrow-left"></i>Ir ao Forja de RPG
+        </a>
+    </div>
   <!-- ============================================================
-       ÁREA 1 — FORJA DE HERÓIS
+       CABEÇALHO
   ============================================================ -->
-  <div id="area-herois" class="area-panel active">
-    <!-- Cabeçalho da página -->
-    <div class="page-header" id="ficha">
-      <span class="section-label">Ficha de Personagem</span>
-      <h1 id="pageTitle">Forje seu Herói</h1>
-      <p id="pageSubtitle" style="color:var(--texto-suave); font-style:italic; max-width:620px; margin:0.5rem auto 0; font-size:0.95rem;">
-        Preencha, salve e leve para a mesa. Auto-save ativado.
-      </p>
-      <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
-        <button class="btn btn-outline-marrom" onclick="exportSheet()"><i class="fas fa-file-export me-2"></i>Exportar</button>
-        <button class="btn btn-outline-marrom" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i>Importar</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importSheet(this)">
-        <button class="btn btn-outline-marrom" onclick="clearAllSystems()"><i class="fas fa-trash me-2"></i>Limpar Tudo</button>
-      </div>
-      <p id="saveIndicator" class="save-indicator">Nenhum salvamento ainda</p>
-    </div>
-
-    <!-- Seletor de sistema (acordeão) -->
-    <div class="system-selector" id="systemSelector" role="tablist" aria-label="Escolher sistema de RPG">
-      <button type="button" class="system-toggle" onclick="toggleSystemMenu(event)" aria-expanded="false" aria-controls="systemOptions">
-        <i class="fas fa-scroll"></i>
-        <span id="currentSystemLabel">D&D 5e</span>
-        <i class="fas fa-chevron-down system-chevron"></i>
-      </button>
-      <div class="system-options" id="systemOptions">
-        <button type="button" class="active" data-system="dnd5e" role="tab" aria-selected="true">
-          <i class="fas fa-dice-d20"></i>D&D 5e
-        </button>
-        <button type="button" data-system="t20" role="tab" aria-selected="false">
-          <i class="fas fa-dragon"></i>Tormenta 20
-        </button>
-        <button type="button" data-system="oprpg" role="tab" aria-selected="false">
-          <i class="fas fa-eye"></i>Ordem Paranormal
-        </button>
-      </div>
-    </div>
-
-    <div id="fichas">
-
-    </div>    
-  </div><!-- /area-herois -->
-
-  <!-- ============================================================
-       ÁREA 2 — FORJA DO MESTRE
-  ============================================================ -->
-  <div id="area-mestre" class="area-panel">
-    <div class="page-header">
-      <span class="section-label">Ferramentas do Mestre</span>
-      <h1>Forja do Mestre</h1>
-      <p style="color:var(--texto-suave); font-style:italic; max-width:640px; margin:0.5rem auto 0; font-size:0.95rem;">
-        Rolagem de dados, rastreador de iniciativa, gerador de NPCs e tabelas de referência.
-      </p>
-    </div>
-
-    <section style="padding-top: 1rem;">
-      <div class="container">
-        <div class="mestre-tabs">
-          <button class="active" data-tab="dados"><i class="fas fa-dice"></i>Rolagem de Dados</button>
-          <button data-tab="iniciativa"><i class="fas fa-swords"></i>Iniciativa</button>
-          <button data-tab="npc"><i class="fas fa-user-shield"></i>Gerador de NPC</button>
-          <button data-tab="tabelas"><i class="fas fa-scroll"></i>Tabelas Rápidas</button>
-        </div>
-
-        <!-- Aba: Dados -->
-        <div class="mestre-panel active" data-panel="dados">
-          <div class="row g-4">
-            <div class="col-lg-7">
-              <div class="gm-card">
-                <div class="gm-card-title"><i class="fas fa-dice-d20"></i>Escolha o dado</div>
-                <div class="dice-grid">
-                  <button class="die-btn" onclick="rollDice(4)"><i class="fas fa-dice-d20"></i>d4</button>
-                  <button class="die-btn" onclick="rollDice(6)"><i class="fas fa-dice-d20"></i>d6</button>
-                  <button class="die-btn" onclick="rollDice(8)"><i class="fas fa-dice-d20"></i>d8</button>
-                  <button class="die-btn" onclick="rollDice(10)"><i class="fas fa-dice-d20"></i>d10</button>
-                  <button class="die-btn" onclick="rollDice(12)"><i class="fas fa-dice-d20"></i>d12</button>
-                  <button class="die-btn" onclick="rollDice(20)"><i class="fas fa-dice-d20"></i>d20</button>
-                  <button class="die-btn" onclick="rollDice(100)"><i class="fas fa-percent"></i>d100</button>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-top:0.75rem;">
-                  <div class="monster-field"><label>Qtd</label><input type="number" id="diceQty" value="1" min="1" max="20"></div>
-                  <div class="monster-field"><label>Mod</label><input type="number" id="diceMod" value="0" min="-20" max="20"></div>
-                  <div class="monster-field"><label>Dado</label><input type="number" id="diceSide" value="20" min="2" max="100"></div>
-                </div>
-                <div class="d-flex gap-2 mt-3 flex-wrap">
-                  <button class="btn btn-vermelho flex-fill" onclick="rollCustom()"><i class="fas fa-dice me-2"></i>Rolar</button>
-                  <button class="btn btn-outline-marrom flex-fill" onclick="clearDiceHistory()"><i class="fas fa-trash me-2"></i>Limpar</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-5">
-              <div class="gm-card">
-                <div class="gm-card-title"><i class="fas fa-scroll"></i>Resultado</div>
-                <div class="dice-result">
-                  <span class="result-value" id="diceResultValue">—</span>
-                  <span class="result-label" id="diceResultLabel">Aguardando rolagem</span>
-                </div>
-                <ul class="dice-history" id="diceHistory">
-                  <li style="justify-content:center; opacity:0.6;"><em>Nenhuma rolagem ainda</em></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Aba: Iniciativa -->
-        <div class="mestre-panel" data-panel="iniciativa">
-          <div class="gm-card">
-            <div class="gm-card-title"><i class="fas fa-swords"></i>Rastreador de Iniciativa</div>
-            <div class="row g-2 mb-3">
-              <div class="col-md-7"><div class="monster-field"><label>Nome</label><input type="text" id="initName" placeholder="Ex.: Goblin Arqueiro"></div></div>
-              <div class="col-md-3"><div class="monster-field"><label>Iniciativa</label><input type="number" id="initValue" placeholder="Auto"></div></div>
-              <div class="col-md-2 d-flex align-items-end"><button class="btn btn-vermelho w-100" onclick="addInitiative()"><i class="fas fa-plus me-1"></i>Adicionar</button></div>
-            </div>
-            <div class="d-flex gap-2 flex-wrap mb-3">
-              <button class="btn btn-dourado" onclick="rollInitiativeAll()"><i class="fas fa-dice-d20 me-2"></i>Rolar d20</button>
-              <button class="btn btn-outline-marrom" onclick="nextTurn()"><i class="fas fa-forward me-2"></i>Próximo</button>
-              <button class="btn btn-outline-marrom" onclick="clearInitiative()"><i class="fas fa-trash me-2"></i>Limpar</button>
-            </div>
-            <ul class="init-list" id="initiativeList">
-              <li style="text-align:center; padding:1rem; color:var(--texto-suave); font-style:italic;">Nenhum combatente ainda</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Aba: NPC -->
-        <div class="mestre-panel" data-panel="npc">
-          <div class="gm-card">
-            <div class="gm-card-title"><i class="fas fa-user-shield"></i>Gerador Rápido de NPC</div>
-            <div class="row g-2 mb-3">
-              <div class="col-md-3">
-                <div class="monster-field"><label>Raça</label>
-                  <select id="npcRaca">
-                    <option>Aleatório</option><option>Humano</option><option>Elfo</option><option>Anão</option>
-                    <option>Halfling</option><option>Meio-Elfo</option><option>Meio-Orc</option>
-                    <option>Tiefling</option><option>Draconato</option><option>Gnomo</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="monster-field"><label>Ocupação</label>
-                  <select id="npcOcupacao">
-                    <option>Aleatório</option><option>Tavernheiro</option><option>Ferreiro</option><option>Mercador</option>
-                    <option>Guarda</option><option>Nobre</option><option>Camponês</option><option>Sacerdote</option>
-                    <option>Ladrão</option><option>Mago</option><option>Bardo</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="monster-field"><label>Tom</label>
-                  <select id="npcTom">
-                    <option>Aleatório</option><option>Amigável</option><option>Neutro</option>
-                    <option>Desconfiado</option><option>Hostil</option><option>Excêntrico</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-vermelho w-100" onclick="generateNPC()">
-                  <i class="fas fa-wand-magic-sparkles me-1"></i>Gerar
-                </button>
-              </div>
-            </div>
-            <div id="npcResult" style="display:none;">
-              <div style="background:#fffdf5; border:1.5px solid var(--marrom); border-radius:4px; padding:1.25rem;">
-                <h3 style="margin-bottom:0.5rem; color:var(--vermelho);" id="npcNome">—</h3>
-                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Raça:</strong> <span id="npcRacaResult">—</span></p>
-                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Ocupação:</strong> <span id="npcOcupacaoResult">—</span></p>
-                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Tom:</strong> <span id="npcTomResult">—</span></p>
-                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Aparência:</strong> <span id="npcAparencia">—</span></p>
-                <p style="margin-bottom:0.5rem; font-size:0.9rem;"><strong style="color:var(--marrom);">Traço:</strong> <span id="npcTraco">—</span></p>
-                <p style="margin:0; font-size:0.9rem;"><strong style="color:var(--marrom);">Gancho:</strong> <span id="npcGancho">—</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Aba: Tabelas -->
-        <div class="mestre-panel" data-panel="tabelas">
-          <div class="row g-4">
-            <div class="col-lg-6">
-              <div class="gm-card">
-                <div class="gm-card-title"><i class="fas fa-coins"></i>Tesouro Aleatório (d100)</div>
-                <table class="ref-table">
-                  <thead><tr><th>d100</th><th>Resultado</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>01-15</strong></td><td>Nada além de poeira</td></tr>
-                    <tr><td><strong>16-30</strong></td><td>2d6 moedas de cobre</td></tr>
-                    <tr><td><strong>31-45</strong></td><td>3d6 moedas de prata</td></tr>
-                    <tr><td><strong>46-60</strong></td><td>2d10 moedas de ouro</td></tr>
-                    <tr><td><strong>61-70</strong></td><td>1d4 gemas de 10 PO</td></tr>
-                    <tr><td><strong>71-80</strong></td><td>Poção de Cura</td></tr>
-                    <tr><td><strong>81-88</strong></td><td>Item mágico incomum</td></tr>
-                    <tr><td><strong>89-95</strong></td><td>Arma +1</td></tr>
-                    <tr><td><strong>96-99</strong></td><td>Item mágico raro</td></tr>
-                    <tr><td><strong>100</strong></td><td>Item lendário + 500 PO</td></tr>
-                  </tbody>
-                </table>
-                <button class="btn btn-dourado w-100 mt-3" onclick="rollTreasure()"><i class="fas fa-dice me-2"></i>Rolar Tesouro</button>
-                <div id="treasureResult" style="display:none; margin-top:1rem; padding:1rem; background:var(--preto); color:var(--dourado-2); border:2px solid var(--dourado); border-radius:4px; text-align:center; font-family:'Cinzel',serif;">
-                  <small style="display:block; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.3rem; color:var(--pergaminho-2);">Resultado</small>
-                  <strong id="treasureText" style="font-size:1.1rem;"></strong>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="gm-card">
-                <div class="gm-card-title"><i class="fas fa-dungeon"></i>Encontros por Ambiente</div>
-                <table class="ref-table">
-                  <thead><tr><th>Ambiente</th><th>Exemplos</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>Floresta</strong></td><td>Lobos, goblins, aranhas gigantes</td></tr>
-                    <tr><td><strong>Caverna</strong></td><td>Kobolds, morcegos, slime, troll</td></tr>
-                    <tr><td><strong>Ruínas</strong></td><td>Esqueletos, zumbis, gárgulas, fantasma</td></tr>
-                    <tr><td><strong>Cidade</strong></td><td>Ladrões, cultistas, guardas corrompidos</td></tr>
-                    <tr><td><strong>Pântano</strong></td><td>Will-o'-wisp, bruxa, crocodilos</td></tr>
-                    <tr><td><strong>Montanha</strong></td><td>Yeti, harpias, griffon, gigante</td></tr>
-                    <tr><td><strong>Deserto</strong></td><td>Múmias, escorpiões gigantes, djinn</td></tr>
-                    <tr><td><strong>Subterrâneo</strong></td><td>Drows, mind flayers, beholder</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="gm-card">
-                <div class="gm-card-title"><i class="fas fa-heart-pulse"></i>Dificuldade de Encontro (D&D 5e)</div>
-                <table class="ref-table">
-                  <thead><tr><th>Nível</th><th>Fácil</th><th>Médio</th><th>Difícil</th></tr></thead>
-                  <tbody>
-                    <tr><td>1º</td><td>25</td><td>50</td><td>75</td></tr>
-                    <tr><td>2º</td><td>50</td><td>100</td><td>150</td></tr>
-                    <tr><td>3º</td><td>75</td><td>150</td><td>225</td></tr>
-                    <tr><td>4º</td><td>125</td><td>250</td><td>375</td></tr>
-                    <tr><td>5º</td><td>250</td><td>500</td><td>750</td></tr>
-                    <tr><td>6º</td><td>300</td><td>600</td><td>900</td></tr>
-                    <tr><td>7º</td><td>350</td><td>750</td><td>1100</td></tr>
-                    <tr><td>8º</td><td>450</td><td>900</td><td>1400</td></tr>
-                    <tr><td>9º</td><td>550</td><td>1100</td><td>1600</td></tr>
-                    <tr><td>10º</td><td>600</td><td>1200</td><td>1900</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="home-header">
+    <span class="section-label">Sobre o Projeto</span>
+    <h1>Conheça a Forja de RPG</h1>
+    <p>Uma plataforma open-source feita por fãs, para fãs de RPG de mesa.</p>
   </div>
 
   <!-- ============================================================
-       ÁREA 3 — FORJA DOS MONSTROS
+       CONTEÚDO PRINCIPAL
   ============================================================ -->
-  <div id="area-monstros" class="area-panel">
-    <div class="page-header">
-      <span class="section-label">Bestiário</span>
-      <h1>Forja dos Monstros</h1>
-      <p style="color:var(--texto-suave); font-style:italic; max-width:640px; margin:0.5rem auto 0; font-size:0.95rem;">
-        Crie criaturas em fichas separadas com acordeão — expanda só o que importa.
-      </p>
-    </div>
+  <section>
+    <div class="container" style="max-width: 1100px;">
 
-    <section style="padding-top: 1rem;">
-      <div class="container">
-        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
-          <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-vermelho" onclick="createMonster()"><i class="fas fa-plus me-2"></i>Novo Monstro</button>
-            <button class="btn btn-outline-marrom" onclick="expandAllMonsters()"><i class="fas fa-angles-down me-2"></i>Expandir</button>
-            <button class="btn btn-outline-marrom" onclick="collapseAllMonsters()"><i class="fas fa-angles-up me-2"></i>Minimizar</button>
+      <!-- ============================================================
+           CARD DO DESENVOLVEDOR
+      ============================================================ -->
+      <div class="about-card reveal">
+        <div class="about-header">
+          <div class="about-avatar">
+            <i class="fas fa-user-astronaut"></i>
           </div>
-          <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-dourado" onclick="exportAllMonsters()"><i class="fas fa-file-export me-2"></i>Exportar Todos</button>
-            <button class="btn btn-outline-marrom" onclick="document.getElementById('importAllMonstersFile').click()"><i class="fas fa-file-import me-2"></i>Importar</button>
-            <input type="file" id="importAllMonstersFile" accept=".json" style="display:none" onchange="importAllMonsters(this)">
+          <div>
+            <h2 class="about-name">Caio Leonni</h2>
+            <p class="about-role">
+              <i class="fas fa-code me-1"></i> Desenvolvedor Full-Stack & Criador do Projeto
+            </p>
           </div>
         </div>
-        <p id="monsterSaveIndicator" class="save-indicator">Nenhum monstro criado ainda</p>
-        <div id="monstersContainer" class="monsters-container"></div>
 
-        <div class="gm-card" style="margin-top: 2rem;">
-          <div class="gm-card-title"><i class="fas fa-skull-crossbones"></i>Referência Rápida — VD</div>
-          <table class="ref-table">
-            <thead><tr><th>VD</th><th>XP</th><th>Prof.</th><th>CA</th><th>PV</th><th>Dano/Turno</th></tr></thead>
-            <tbody>
-              <tr><td><strong>0</strong></td><td>10</td><td>+2</td><td>13</td><td>1-6</td><td>0-1</td></tr>
-              <tr><td><strong>1/8</strong></td><td>25</td><td>+2</td><td>13</td><td>7-35</td><td>2-3</td></tr>
-              <tr><td><strong>1/4</strong></td><td>50</td><td>+2</td><td>13</td><td>36-49</td><td>4-5</td></tr>
-              <tr><td><strong>1/2</strong></td><td>100</td><td>+2</td><td>13</td><td>50-70</td><td>6-8</td></tr>
-              <tr><td><strong>1</strong></td><td>200</td><td>+2</td><td>14</td><td>71-85</td><td>9-14</td></tr>
-              <tr><td><strong>2</strong></td><td>450</td><td>+2</td><td>14</td><td>86-100</td><td>15-20</td></tr>
-              <tr><td><strong>3</strong></td><td>700</td><td>+2</td><td>15</td><td>101-115</td><td>21-26</td></tr>
-              <tr><td><strong>4</strong></td><td>1100</td><td>+2</td><td>15</td><td>116-130</td><td>27-32</td></tr>
-              <tr><td><strong>5</strong></td><td>1800</td><td>+3</td><td>15</td><td>131-145</td><td>33-38</td></tr>
-              <tr><td><strong>10</strong></td><td>5900</td><td>+4</td><td>17</td><td>206-220</td><td>63-68</td></tr>
-            </tbody>
-          </table>
+        <div class="about-body">
+          <p>
+            A <strong>Forja de RPG</strong> nasceu da paixão por RPG de mesa e da vontade de resolver um problema real:
+            a dificuldade de organizar fichas, referências e ferramentas durante as sessões.
+          </p>
+          <p>
+            O objetivo é simples: <strong>oferecer uma plataforma completa, gratuita e acessível</strong> para
+            mestres e jogadores de D&D 5e, Tormenta 20 e Ordem Paranormal — com fichas dinâmicas, ferramentas
+            do mestre e bestiário, tudo funcionando direto no navegador, sem precisar de instalação.
+          </p>
+
+          <div class="about-features">
+            <div class="feature-pill"><i class="fas fa-dice-d20"></i>3 sistemas de RPG</div>
+            <div class="feature-pill"><i class="fas fa-database"></i>Auto-save local</div>
+            <div class="feature-pill"><i class="fas fa-mobile-screen"></i>100% responsivo</div>
+            <div class="feature-pill"><i class="fas fa-unlock"></i>Open-source</div>
+            <div class="feature-pill"><i class="fas fa-cloud-arrow-down"></i>Export/Import JSON</div>
+            <div class="feature-pill"><i class="fas fa-wand-magic-sparkles"></i>Ferramentas do Mestre</div>
+          </div>
         </div>
       </div>
-    </section>
-  </div>
 
-  <!-- Toast -->
-  <div class="toast-save" id="toastSave"><i class="fas fa-check-circle me-2"></i>Salvo com sucesso!</div>
+      <!-- ============================================================
+           CARD DO GITHUB
+      ============================================================ -->
+      <div class="about-card reveal">
+        <div class="about-card-title">
+          <i class="fab fa-github"></i>
+          Código-fonte no GitHub
+        </div>
+        <p style="color:var(--texto-suave); margin-bottom: 1.25rem; position: relative; z-index: 2;">
+          Todo o código do projeto é aberto e está disponível no GitHub. Sinta-se livre para explorar,
+          abrir issues, sugerir melhorias ou enviar pull requests.
+        </p>
 
-  <!-- Botão voltar ao topo -->
-  <button id="backToTop" class="back-to-top" aria-label="Voltar ao topo">
-    <i class="fas fa-arrow-up"></i>
-  </button>
+        <div class="github-repo-box">
+          <div class="github-repo-info">
+            <div class="github-icon"><i class="fab fa-github"></i></div>
+            <div>
+              <h4>Leonsis / Forja_rpg</h4>
+              <p>Plataforma de fichas e ferramentas para RPG de mesa</p>
+            </div>
+          </div>
+          <a href="https://github.com/Leonsis/Forja_rpg" target="_blank" rel="noopener" class="btn btn-dourado">
+            <i class="fab fa-github me-2"></i>Acessar Repositório
+          </a>
+        </div>
+      </div>
 
-  <!-- Footer -->
+      <!-- ============================================================
+           CARD DE COLABORAÇÃO
+      ============================================================ -->
+      <div class="about-card reveal">
+        <div class="about-card-title">
+          <i class="fas fa-hand-holding-heart"></i>
+          Como colaborar
+        </div>
+        <p style="color:var(--texto-suave); margin-bottom: 1.25rem; position: relative; z-index: 2;">
+          Este projeto é construído em comunidade. Existem várias formas de contribuir — escolha a que
+          mais combina com você.
+        </p>
+
+        <div class="contrib-grid">
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-code-branch"></i></div>
+            <h5>Enviar código</h5>
+            <p>Faça um fork do repositório, implemente uma melhoria e abra um Pull Request.</p>
+          </div>
+
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-bug"></i></div>
+            <h5>Reportar bugs</h5>
+            <p>Encontrou algo quebrado? Abra uma <em>issue</em> descrevendo o problema com detalhes.</p>
+          </div>
+
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-lightbulb"></i></div>
+            <h5>Sugerir ideias</h5>
+            <p>Tem uma ideia de nova funcionalidade ou sistema? Compartilhe nas discussões.</p>
+          </div>
+
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-book-open"></i></div>
+            <h5>Melhorar docs</h5>
+            <p>Ajudar com README, exemplos, tutoriais ou traduções é tão valioso quanto código.</p>
+          </div>
+
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-share-nodes"></i></div>
+            <h5>Divulgar</h5>
+            <p>Compartilhe o projeto com sua mesa de RPG — quanto mais gente usando, melhor ele fica.</p>
+          </div>
+
+          <div class="contrib-item">
+            <div class="contrib-icon"><i class="fas fa-star"></i></div>
+            <h5>Dar uma estrela</h5>
+            <p>Uma ⭐ no GitHub ajuda o projeto a ganhar visibilidade e motiva o desenvolvimento.</p>
+          </div>
+        </div>
+
+        <div class="contrib-cta">
+          <a href="https://github.com/Leonsis/Forja_rpg" target="_blank" rel="noopener" class="btn btn-vermelho">
+            <i class="fas fa-code-pull-request me-2"></i>Começar a contribuir
+          </a>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CARD DE TECNOLOGIAS
+      ============================================================ -->
+      <div class="about-card reveal">
+        <div class="about-card-title">
+          <i class="fas fa-layer-group"></i>
+          Tecnologias utilizadas
+        </div>
+        <div class="tech-grid">
+          <div class="tech-item"><i class="fab fa-html5" style="color:#e34f26"></i><span>HTML5</span></div>
+          <div class="tech-item"><i class="fab fa-css3-alt" style="color:#1572b6"></i><span>CSS 3</span></div>
+          <div class="tech-item"><i class="fab fa-js" style="color:#f7df1e"></i><span>JavaScript</span></div>
+          <div class="tech-item"><i class="fab fa-bootstrap" style="color:#7952b3"></i><span>Bootstrap 5</span></div>
+          <div class="tech-item"><i class="fas fa-font" style="color:#b8892b"></i><span>Font Awesome</span></div>
+          <div class="tech-item"><i class="fas fa-database" style="color:#22d3ee"></i><span>LocalStorage</span></div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 mb-5 reveal">
+        <a href="home.html" class="back-to-system">
+          <i class="fas fa-arrow-left"></i>Ir ao Forja de RPG
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
   <footer>
     <div class="container text-center">
       <h5>Forja de RPG</h5>
-      <p>Fichas de Herói (D&D 5e, Tormenta 20, Ordem Paranormal), Ferramentas do Mestre e Bestiário.</p>
-      <p style="margin:0; padding-top:1.25rem; border-top:1px solid rgba(184,137,43,0.25); font-size:0.82rem; font-style:italic; color:rgba(237,224,196,0.55);">
+      <p>Projeto open-source criado por <strong>Caio Leonni</strong></p>
+      <p>
+        <a href="https://github.com/Leonsis/Forja_rpg" target="_blank" rel="noopener" style="color:var(--dourado-2);">
+          <i class="fab fa-github me-1"></i>github.com/Leonsis/Forja_rpg
+        </a>
+      </p>
+      <p style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(184,137,43,0.25); font-size:0.78rem; font-style:italic; color:rgba(237,224,196,0.55);">
         D&D é marca da Wizards of the Coast. Tormenta 20 é marca da Jambô. Ordem Paranormal é marca da Jambô. Projeto de fãs sem fins comerciais.
       </p>
     </div>
   </footer>
+
+  <!-- ============================================================
+       SCRIPTS
+  ============================================================ -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* Animação reveal — fade + slide-up conforme o scroll */
+    document.addEventListener('DOMContentLoaded', () => {
+      const elements = document.querySelectorAll('.reveal');
+      if (!elements.length) return;
+
+      if (!('IntersectionObserver' in window)) {
+        elements.forEach(el => el.classList.add('visible'));
+        return;
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      elements.forEach(el => io.observe(el));
+    });
+  </script>
 
 </body>
 </html>
