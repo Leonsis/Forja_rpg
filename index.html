@@ -36,7 +36,6 @@
         Preencha, salve e leve para a mesa. Auto-save ativado.
       </p>
       <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
-        <button class="btn btn-vermelho" onclick="saveAll()"><i class="fas fa-bookmark me-2"></i>Salvar</button>
         <button class="btn btn-outline-marrom" onclick="exportSheet()"><i class="fas fa-file-export me-2"></i>Exportar</button>
         <button class="btn btn-outline-marrom" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i>Importar</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importSheet(this)">
@@ -53,15 +52,7 @@
         <i class="fas fa-chevron-down system-chevron"></i>
       </button>
       <div class="system-options" id="systemOptions">
-        <button type="button" class="active" data-system="dnd5e" role="tab" aria-selected="true">
-          <i class="fas fa-dice-d20"></i>D&D 5e
-        </button>
-        <button type="button" data-system="t20" role="tab" aria-selected="false">
-          <i class="fas fa-dragon"></i>Tormenta 20
-        </button>
-        <button type="button" data-system="oprpg" role="tab" aria-selected="false">
-          <i class="fas fa-eye"></i>Ordem Paranormal
-        </button>
+        
       </div>
     </div>
 
