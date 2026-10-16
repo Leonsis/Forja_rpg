@@ -1,10 +1,3 @@
-// Carrega elementos da DOM
-document.addEventListener('DOMContentLoaded', async () => {
-    await incHTML('mainNav', './src/inc/nav.html');    
-    await buttonFichas();
-    await fichaHTML('fichas');
-});
-
 async function incHTML(elementId, path) {
     const element = document.getElementById(elementId);
 
@@ -25,14 +18,7 @@ async function incHTML(elementId, path) {
         console.error(`Erro ao carregar ${path}:`, error);
     }
 }
-
-
-const fichas = [
-    { id: 'dd', nome: 'D&D 5e', icone: 'fas fa-dice-d20' },
-    { id: 't20', nome: 'Tormenta 20', icone: 'fas fa-dragon' },
-    { id: 'oprpg', nome: 'Ordem Paranormal', icone: 'fas fa-eye' }
-];
-
+ 
 async function fichaHTML(elementId) {
     const element = document.getElementById(elementId);
 
@@ -41,9 +27,10 @@ async function fichaHTML(elementId) {
         return;
     }
 
+    const fichas = ['dd', 't20', 'op'];
     for (const ficha of fichas) {
         try {
-            const response = await fetch(`./src/fichas/${ficha.id}.html`);
+            const response = await fetch(`./src/fichas/${ficha}.html`);
 
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
@@ -51,51 +38,22 @@ async function fichaHTML(elementId) {
 
             const html = await response.text();
 
+            // Cria um contêiner para cada ficha
             const div = document.createElement('div');
-            div.id = `ficha-${ficha.id}`;
+            div.id = `ficha-${ficha}`;
             div.innerHTML = html;
-
-            // Esconde as fichas inicialmente
-            div.hidden = true;
 
             element.appendChild(div);
 
-            console.log(`Ficha ${ficha.nome} carregada.`);
+            console.log(`Ficha ${ficha} carregada com sucesso.`);
         } catch (error) {
-            console.error(`Erro ao carregar ${ficha.id}.html:`, error);
+            console.error(`Erro ao carregar ${ficha}.html:`, error);
         }
     }
 }
 
-function buttonFichas() {
-    const vSystemOptions = document.getElementById('systemOptions');
 
-    if (!vSystemOptions) {
-        console.error('Elemento #systemOptions não encontrado.');
-        return;
-    }
-
-    // Evita duplicar os botões
-    vSystemOptions.replaceChildren();
-
-    for (const ficha of fichas) {
-        const button = document.createElement('button');
-
-        button.type = 'button';
-        button.dataset.system = ficha.id;
-        button.setAttribute('role', 'tab');
-        button.setAttribute('aria-selected', 'false');
-
-        const icon = document.createElement('i');
-        icon.className = ficha.icone;
-        icon.setAttribute('aria-hidden', 'true');
-
-        button.append(icon, document.createTextNode(` ${ficha.nome}`));
-
-        button.addEventListener('click', () => {
-            selecionarFicha(ficha.id);
-        });
-
-        vSystemOptions.appendChild(button);
-    }
-}
+document.addEventListener('DOMContentLoaded', async () => {
+    await incHTML('mainNav', './src/inc/nav.html');
+    await fichaHTML('fichas');
+});
